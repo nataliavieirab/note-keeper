@@ -56,7 +56,19 @@ const routes: Routes = [
     path: 'notas',
     loadComponent: () => import('./notas/shell/notas-shell').then((c) => c.NotasShell),
     children: [
-      { path: '', redirectTo: 'cadastrar', pathMatch: 'full' },
+      { path: '', redirectTo: 'listar', pathMatch: 'full' },
+      {
+        path: 'listar',
+        loadComponent: () => import('./notas/listar/listar-notas').then((c) => c.ListarNotas),
+      },
+      {
+        path: 'detalhes/:notaId',
+        loadComponent: () => import('./notas/detalhes/detalhes-nota').then((c) => c.DetalhesNota),
+      },
+      {
+        path: 'editar/:notaId',
+        loadComponent: () => import('./notas/editar/editar-nota').then((c) => c.EditarNota),
+      },
       {
         path: 'cadastrar',
         loadComponent: () =>

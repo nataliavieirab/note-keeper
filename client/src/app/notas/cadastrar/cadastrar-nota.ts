@@ -87,7 +87,7 @@ export class CadastrarNota {
     this.notasService.cadastrar(request).subscribe({
       next: () => {
         this.enviandoFormulario.set(false);
-        void this.router.navigateByUrl('/');
+        void this.router.navigateByUrl('/notas/listar');
       },
       error: (resposta: HttpErrorResponse) => {
         this.mensagemErro.set(
