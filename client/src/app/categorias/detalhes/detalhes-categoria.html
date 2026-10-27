@@ -17,10 +17,10 @@
     </dl>
 
     <div class="flex shrink-0 gap-3">
-      <button type="button"
+      <a [routerLink]="['/categorias/editar', categoria.id]"
         class="rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white hover:bg-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700">
         Editar
-      </button>
+      </a>
       <button type="button" (click)="abrirConfirmacao()"
         class="rounded-xl border border-rose-300 px-5 py-3 text-sm font-semibold text-rose-700 hover:bg-rose-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-700">
         Excluir

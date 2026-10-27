@@ -21,6 +21,10 @@ export class CategoriasService {
     return this.http.post<CategoriaDto>(`${this.urlApi}/categorias`, request);
   }
 
+  atualizar(categoriaId: string, request: CriarCategoriaRequest): Observable<CategoriaDto> {
+    return this.http.put<CategoriaDto>(`${this.urlApi}/categorias/${categoriaId}`, request);
+  }
+
   excluir(categoriaId: string): Observable<void> {
     return this.http.delete<void>(`${this.urlApi}/categorias/${categoriaId}`);
   }

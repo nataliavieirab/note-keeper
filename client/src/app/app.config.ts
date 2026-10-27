@@ -41,6 +41,11 @@ const routes: Routes = [
           import('./categorias/detalhes/detalhes-categoria').then((c) => c.DetalhesCategoria),
       },
       {
+        path: 'editar/:categoriaId',
+        loadComponent: () =>
+          import('./categorias/editar/editar-categoria').then((c) => c.EditarCategoria),
+      },
+      {
         path: 'cadastrar',
         loadComponent: () =>
           import('./categorias/cadastrar/cadastrar-categoria').then((c) => c.CadastrarCategoria),

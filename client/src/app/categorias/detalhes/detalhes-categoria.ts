@@ -1,12 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ApiValidationProblemDetails } from '../../auth/auth.models';
 import { CategoriaDto } from '../categorias.models';
 import { CategoriasService } from '../categorias.service';
 
 @Component({
-  imports: [],
+  imports: [RouterLink],
   selector: 'app-detalhes-categoria',
   templateUrl: './detalhes-categoria.html',
 })
