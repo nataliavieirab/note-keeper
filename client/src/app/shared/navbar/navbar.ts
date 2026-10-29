@@ -1,7 +1,13 @@
 import { afterNextRender, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
-import { LucideLogOut, LucideMenu, LucideNotebookPen, LucideSearch, LucideX } from '@lucide/angular';
+import {
+  LucideLogOut,
+  LucideMenu,
+  LucideNotebookPen,
+  // LucideSearch,
+  LucideX,
+} from '@lucide/angular';
 import { filter, map } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
 import { BTN_GHOST, BTN_PRIMARY } from '../ui/classes';
@@ -9,7 +15,7 @@ import { BTN_GHOST, BTN_PRIMARY } from '../ui/classes';
 const CONSULTA_DESKTOP = '(min-width: 768px)';
 
 @Component({
-  imports: [LucideLogOut, LucideMenu, LucideNotebookPen, LucideSearch, LucideX, RouterLink],
+  imports: [LucideLogOut, LucideMenu, LucideNotebookPen, /* LucideSearch, */ LucideX, RouterLink],
   selector: 'app-navbar',
   templateUrl: './navbar.html',
   host: { class: 'sticky top-0 z-20 block' },
@@ -25,6 +31,7 @@ export class Navbar {
   protected readonly classesEntrar = BTN_GHOST;
   protected readonly classesCriarConta = BTN_PRIMARY;
   protected readonly links = [
+    { rota: '/', prefixo: '/', rotulo: 'Início' },
     { rota: '/notas/listar', prefixo: '/notas', rotulo: 'Notas' },
     { rota: '/categorias/listar', prefixo: '/categorias', rotulo: 'Categorias' },
   ] as const;
@@ -79,6 +86,8 @@ export class Navbar {
 
   protected linkAtivo(prefixo: string): boolean {
     const caminho = this.caminho(this.urlAtual());
+
+    if (prefixo === '/') return caminho === '/';
 
     return caminho === prefixo || caminho.startsWith(`${prefixo}/`);
   }
