@@ -32,6 +32,17 @@
   --color-cat-6: var(--cat-6);
   --color-cat-7: var(--cat-7);
   --color-cat-8: var(--cat-8);
+  --color-cat-9: var(--cat-9);
+  --color-cat-10: var(--cat-10);
+  --color-cat-11: var(--cat-11);
+  --color-cat-12: var(--cat-12);
+  --color-cat-13: var(--cat-13);
+  --color-cat-14: var(--cat-14);
+  --color-cat-15: var(--cat-15);
+  --color-cat-16: var(--cat-16);
+  --color-cat-17: var(--cat-17);
+  --color-cat-18: var(--cat-18);
+  --color-cat-19: var(--cat-19);
   --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
   --shadow-card: var(--shadow-card);
   --shadow-float: var(--shadow-float);
@@ -64,6 +75,17 @@
   --cat-6: oklch(0.62 0.22 355);
   --cat-7: oklch(0.72 0.16 80);
   --cat-8: oklch(0.55 0.2 275);
+  --cat-9: oklch(0.42 0.2 274);
+  --cat-10: oklch(0.42 0.16 145);
+  --cat-11: oklch(0.42 0.2 336);
+  --cat-12: oklch(0.51 0.16 128);
+  --cat-13: oklch(0.42 0.14 246);
+  --cat-14: oklch(0.42 0.13 72);
+  --cat-15: oklch(0.51 0.2 322);
+  --cat-16: oklch(0.38 0.2 8);
+  --cat-17: oklch(0.42 0.2 304);
+  --cat-18: oklch(0.42 0.2 36);
+  --cat-19: oklch(0.38 0.13 112);
   --gradient-brand: linear-gradient(135deg, var(--primary), var(--primary-glow));
   --shadow-card:
     0 1px 2px oklch(0.22 0.03 264 / 0.04), 0 4px 16px -6px oklch(0.22 0.03 264 / 0.08);

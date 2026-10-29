@@ -1,7 +1,8 @@
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { URL_API } from '../auth/auth.tokens';
+import { sincronizarCoresCategorias } from './categorias.cores';
 import { CategoriaDto, CriarCategoriaRequest } from './categorias.models';
 
 @Service()
@@ -10,7 +11,9 @@ export class CategoriasService {
   private readonly urlApi = inject(URL_API);
 
   listar(): Observable<readonly CategoriaDto[]> {
-    return this.http.get<readonly CategoriaDto[]>(`${this.urlApi}/categorias`);
+    return this.http
+      .get<readonly CategoriaDto[]>(`${this.urlApi}/categorias`)
+      .pipe(tap((categorias) => sincronizarCoresCategorias(categorias)));
   }
 
   obterPorId(categoriaId: string): Observable<CategoriaDto> {

@@ -3,6 +3,7 @@ import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LucideArrowLeft, LucidePencil, LucideTrash } from '@lucide/angular';
 import { ApiValidationProblemDetails } from '../../auth/auth.models';
+import { CategoriasService } from '../../categorias/categorias.service';
 import { CategoryBadge } from '../../shared/ui/category-badge';
 import { UI } from '../../shared/ui/classes';
 import { ConfirmDialog } from '../../shared/ui/confirm-dialog';
@@ -27,6 +28,7 @@ export class DetalhesNota {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly notasService = inject(NotasService);
+  private readonly categoriasService = inject(CategoriasService);
   private readonly notaId: string | null;
 
   protected readonly ui = UI;
@@ -44,6 +46,8 @@ export class DetalhesNota {
       this.carregando.set(false);
       return;
     }
+
+    this.carregarCoresCategorias();
 
     this.notasService.obterPorId(this.notaId).subscribe({
       next: (nota) => {
@@ -104,6 +108,12 @@ export class DetalhesNota {
         );
         this.excluindo.set(false);
       },
+    });
+  }
+
+  private carregarCoresCategorias(): void {
+    this.categoriasService.listar().subscribe({
+      error: () => undefined,
     });
   }
 

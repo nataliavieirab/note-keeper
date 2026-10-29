@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LucideArrowLeft, LucidePencil, LucideTrash } from '@lucide/angular';
 import { ApiValidationProblemDetails } from '../../auth/auth.models';
@@ -21,8 +21,12 @@ export class DetalhesCategoria {
   private readonly categoriaId: string | null;
 
   protected readonly ui = UI;
-  protected readonly corCategoria = obterCorCategoria;
   protected readonly categoria = signal<CategoriaDto | null>(null);
+  protected readonly corDaCategoria = computed(() => {
+    const categoria = this.categoria();
+
+    return categoria ? obterCorCategoria(categoria) : '';
+  });
   protected readonly carregando = signal(true);
   protected readonly mensagemErro = signal('');
   protected readonly confirmandoExclusao = signal(false);
@@ -35,6 +39,8 @@ export class DetalhesCategoria {
       this.carregando.set(false);
       return;
     }
+
+    this.carregarCoresCategorias();
 
     this.categoriasService.obterPorId(this.categoriaId).subscribe({
       next: (categoria) => {
@@ -71,6 +77,12 @@ export class DetalhesCategoria {
         this.mensagemErro.set(this.obterMensagemErroExclusao(resposta));
         this.excluindo.set(false);
       },
+    });
+  }
+
+  private carregarCoresCategorias(): void {
+    this.categoriasService.listar().subscribe({
+      error: () => undefined,
     });
   }
 
