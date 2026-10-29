@@ -39,17 +39,15 @@
             <p id="filtro-categorias-dica" class="mb-2 text-xs text-muted-foreground">
               Mostra notas com todas as categorias marcadas
             </p>
-            <ul
-              class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0"
-              aria-describedby="filtro-categorias-dica"
-            >
+            <ul class="flex flex-wrap gap-2" aria-describedby="filtro-categorias-dica">
               @for (categoria of categorias(); track categoria.id) {
-                <li class="shrink-0">
+                <li class="max-w-full">
                   <button
                     type="button"
                     appCategoryBadge
                     [categoria]="categoria"
                     tamanho="md"
+                    [colorido]="true"
                     [ativo]="categoriaSelecionada(categoria.id)"
                     [attr.aria-pressed]="categoriaSelecionada(categoria.id)"
                     [disabled]="excluindo()"
@@ -90,9 +88,7 @@
             <p class="sr-only">Carregando notas...</p>
             <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
               @for (item of esqueleto; track item) {
-                <li
-                  class="animate-pulse rounded-2xl border border-border bg-card p-5 shadow-card"
-                >
+                <li class="animate-pulse rounded-2xl border border-border bg-card p-5 shadow-card">
                   <div class="flex items-center justify-between gap-3">
                     <div class="h-4 w-2/3 rounded bg-muted"></div>
                     <div class="h-3 w-16 rounded bg-muted"></div>
