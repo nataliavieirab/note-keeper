@@ -23,7 +23,7 @@ import { UI } from '../shared/ui/classes';
 import { NotesCollage } from '../shared/ui/notes-collage';
 import { StatusBadge } from '../shared/ui/status-badge';
 
-const QUANTIDADE_NOTAS_RECENTES = 3;
+const QUANTIDADE_NOTAS_RECENTES = 4;
 
 @Component({
   imports: [
