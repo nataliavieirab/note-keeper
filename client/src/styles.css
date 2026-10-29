@@ -1,1 +1,88 @@
 @import 'tailwindcss';
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-primary: var(--primary);
+  --color-primary-glow: var(--primary-glow);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-cat-1: var(--cat-1);
+  --color-cat-2: var(--cat-2);
+  --color-cat-3: var(--cat-3);
+  --color-cat-4: var(--cat-4);
+  --color-cat-5: var(--cat-5);
+  --color-cat-6: var(--cat-6);
+  --color-cat-7: var(--cat-7);
+  --color-cat-8: var(--cat-8);
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --shadow-card: var(--shadow-card);
+  --shadow-float: var(--shadow-float);
+}
+
+:root {
+  --radius: 0.875rem;
+  --background: oklch(0.985 0.004 264);
+  --foreground: oklch(0.22 0.03 264);
+  --card: oklch(1 0 0);
+  --primary: oklch(0.56 0.22 275);
+  --primary-glow: oklch(0.62 0.24 300);
+  --primary-foreground: oklch(0.99 0 0);
+  --muted: oklch(0.965 0.006 264);
+  --muted-foreground: oklch(0.52 0.025 264);
+  --accent: oklch(0.95 0.03 275);
+  --accent-foreground: oklch(0.45 0.2 275);
+  --destructive: oklch(0.6 0.22 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --success: oklch(0.62 0.16 155);
+  --success-soft: oklch(0.95 0.05 155);
+  --border: oklch(0.925 0.008 264);
+  --input: oklch(0.91 0.01 264);
+  --ring: oklch(0.56 0.22 275);
+  --cat-1: oklch(0.6 0.19 255);
+  --cat-2: oklch(0.7 0.18 50);
+  --cat-3: oklch(0.6 0.23 300);
+  --cat-4: oklch(0.68 0.13 210);
+  --cat-5: oklch(0.65 0.17 150);
+  --cat-6: oklch(0.62 0.22 355);
+  --cat-7: oklch(0.72 0.16 80);
+  --cat-8: oklch(0.55 0.2 275);
+  --gradient-brand: linear-gradient(135deg, var(--primary), var(--primary-glow));
+  --shadow-card:
+    0 1px 2px oklch(0.22 0.03 264 / 0.04), 0 4px 16px -6px oklch(0.22 0.03 264 / 0.08);
+  --shadow-float: 0 10px 30px -8px color-mix(in oklab, var(--primary) 55%, transparent);
+}
+
+@utility bg-brand {
+  background-image: var(--gradient-brand);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+}
