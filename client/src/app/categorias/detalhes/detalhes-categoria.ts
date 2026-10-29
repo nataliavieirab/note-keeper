@@ -1,12 +1,16 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { LucideArrowLeft, LucidePencil, LucideTrash } from '@lucide/angular';
 import { ApiValidationProblemDetails } from '../../auth/auth.models';
+import { UI } from '../../shared/ui/classes';
+import { ConfirmDialog } from '../../shared/ui/confirm-dialog';
+import { obterCorCategoria } from '../categorias.cores';
 import { CategoriaDto } from '../categorias.models';
 import { CategoriasService } from '../categorias.service';
 
 @Component({
-  imports: [RouterLink],
+  imports: [ConfirmDialog, LucideArrowLeft, LucidePencil, LucideTrash, RouterLink],
   selector: 'app-detalhes-categoria',
   templateUrl: './detalhes-categoria.html',
 })
@@ -16,6 +20,8 @@ export class DetalhesCategoria {
   private readonly categoriasService = inject(CategoriasService);
   private readonly categoriaId: string | null;
 
+  protected readonly ui = UI;
+  protected readonly corCategoria = obterCorCategoria;
   protected readonly categoria = signal<CategoriaDto | null>(null);
   protected readonly carregando = signal(true);
   protected readonly mensagemErro = signal('');

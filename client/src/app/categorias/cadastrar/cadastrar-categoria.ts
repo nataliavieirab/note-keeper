@@ -2,7 +2,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { form, FormField, maxLength, required } from '@angular/forms/signals';
 import { Router, RouterLink } from '@angular/router';
+import { LucideFolderPlus } from '@lucide/angular';
 import { ApiValidationProblemDetails } from '../../auth/auth.models';
+import { inputCls, UI } from '../../shared/ui/classes';
+import { PageHeader } from '../../shared/ui/page-header';
 import { CriarCategoriaRequest } from '../categorias.models';
 import { CategoriasService } from '../categorias.service';
 
@@ -11,7 +14,7 @@ export interface CategoriaFormModel {
 }
 
 @Component({
-  imports: [FormField, RouterLink],
+  imports: [FormField, LucideFolderPlus, PageHeader, RouterLink],
   selector: 'app-cadastrar-categoria',
   templateUrl: './cadastrar-categoria.html',
 })
@@ -19,6 +22,8 @@ export class CadastrarCategoria {
   private readonly categoriasService = inject(CategoriasService);
   private readonly router = inject(Router);
 
+  protected readonly ui = UI;
+  protected readonly inputCls = inputCls;
   protected readonly enviandoFormulario = signal(false);
   protected readonly mensagemErro = signal('');
 

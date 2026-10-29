@@ -2,13 +2,16 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { form, FormField, maxLength, required } from '@angular/forms/signals';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { LucideFolderPlus } from '@lucide/angular';
 import { ApiValidationProblemDetails } from '../../auth/auth.models';
+import { inputCls, UI } from '../../shared/ui/classes';
+import { PageHeader } from '../../shared/ui/page-header';
 import { CriarCategoriaRequest } from '../categorias.models';
 import { CategoriaFormModel } from '../cadastrar/cadastrar-categoria';
 import { CategoriasService } from '../categorias.service';
 
 @Component({
-  imports: [FormField, RouterLink],
+  imports: [FormField, LucideFolderPlus, PageHeader, RouterLink],
   selector: 'app-editar-categoria',
   templateUrl: './editar-categoria.html',
 })
@@ -18,6 +21,8 @@ export class EditarCategoria {
   private readonly route = inject(ActivatedRoute);
   private readonly categoriaId: string | null;
 
+  protected readonly ui = UI;
+  protected readonly inputCls = inputCls;
   protected readonly carregando = signal(true);
   protected readonly formularioVisivel = signal(false);
   protected readonly enviandoFormulario = signal(false);
