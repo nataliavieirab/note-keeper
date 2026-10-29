@@ -1,104 +1,199 @@
-<main class="min-h-screen bg-[#f4f6fb] text-slate-900">
+<div class="min-h-screen bg-background">
   <app-navbar></app-navbar>
 
-  <section class="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24">
+  <main class="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
     @if (sessaoAutenticada(); as sessao) {
-      <div class="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-        <div>
-          <p class="mb-4 text-sm font-semibold tracking-wide text-indigo-700">
-            SUAS NOTAS, EM UM SÓ LUGAR
+    <section class="relative overflow-hidden rounded-3xl bg-brand p-8 text-primary-foreground shadow-float sm:p-10"
+      aria-labelledby="home-titulo">
+      <div class="absolute -top-16 -right-16 size-64 rounded-full bg-primary-foreground/10" aria-hidden="true"></div>
+      <div class="absolute right-32 -bottom-20 size-48 rounded-full bg-primary-foreground/10" aria-hidden="true"></div>
+      <div class="relative flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        <div class="min-w-0">
+          <p class="truncate text-sm font-semibold text-primary-foreground/80">
+            {{ sessao.usuario.email }}
           </p>
-          <h1 class="max-w-2xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
-            Que bom ter você por aqui.
+          <h1 id="home-titulo" class="mt-1 text-3xl font-extrabold tracking-tight break-words sm:text-4xl">
+            Olá, {{ sessao.usuario.nome }}
           </h1>
-          <p class="mt-5 max-w-xl text-lg leading-8 text-slate-600">
-            Acesse suas notas e categorias para continuar organizando ideias e informações
-            importantes.
+          <p class="mt-2 text-primary-foreground/85" aria-live="polite">
+            @if (carregando()) {
+            Carregando seu resumo...
+            } @else if (!mensagemErroNotas() && !mensagemErroCategorias()) {
+            Você tem {{ plural(notas().length, 'nota', 'notas') }} ({{
+            plural(totalAtivas(), 'ativa', 'ativas')
+            }}) em {{ plural(categorias().length, 'categoria', 'categorias') }}.
+            } @else {
+            Acesse suas notas e categorias para continuar organizando suas ideias.
+            }
           </p>
-          <div
-            class="mt-8 inline-flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900"
-          >
-            <span
-              class="grid size-7 place-items-center rounded-full bg-emerald-100 font-bold"
-              aria-hidden="true"
-              ><svg lucideCheck class="size-4" aria-hidden="true"></svg></span
-            >Conectado como <strong class="-ml-1">{{ sessao.usuario.email }}</strong>
-          </div>
         </div>
-
-        <div class="rounded-3xl bg-[#101b36] p-8 text-white shadow-xl shadow-indigo-950/10 sm:p-10">
-          <div class="mb-12 flex items-start justify-between">
-            <span
-              class="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-medium text-cyan-200"
-              >SEU ESPAÇO DE ORGANIZAÇÃO</span
-            ><svg lucideSparkles class="size-6 text-cyan-300" aria-hidden="true"></svg>
-          </div>
-          <h2 class="text-2xl font-semibold">Suas ideias sempre à mão.</h2>
-          <p class="mt-3 leading-7 text-slate-300">
-            Crie notas, organize-as por categorias e encontre com facilidade o que precisa.
-          </p>
-          <div class="mt-8 h-1.5 overflow-hidden rounded-full bg-white/10" aria-hidden="true">
-            <div class="h-full w-1/3 rounded-full bg-cyan-300"></div>
-          </div>
-          <p class="mt-3 text-xs text-slate-400">Organização que acompanha você.</p>
-        </div>
+        <a routerLink="/notas/cadastrar"
+          class="inline-flex h-11 shrink-0 items-center gap-2 self-start rounded-xl bg-card px-5 text-sm font-semibold text-primary transition hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-primary sm:self-auto">
+          <svg lucidePlus class="size-4" aria-hidden="true"></svg> Nova nota
+        </a>
       </div>
-    } @else {
-      <div class="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-        <div>
-          <p class="mb-4 text-sm font-semibold tracking-wide text-indigo-700">
-            IDEIAS ORGANIZADAS, TUDO MAIS SIMPLES
-          </p>
-          <h1 class="max-w-2xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-6xl">
-            Suas ideias, sempre à mão.
-          </h1>
-          <p class="mt-5 max-w-xl text-lg leading-8 text-slate-600">
-            Registre notas e organize o que é importante por categorias, tudo em um só lugar.
-          </p>
+    </section>
 
-          <div class="mt-8 flex flex-wrap gap-3">
-            <a
-              routerLink="/auth/cadastro"
-              class="rounded-xl bg-indigo-700 px-5 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700"
-              >Começar agora <svg lucideArrowRight class="ml-1 inline size-4"></svg>
+    <div class="mt-8 grid gap-6 lg:grid-cols-3">
+      <section class="min-w-0 lg:col-span-2" aria-labelledby="recentes-titulo">
+        <div class="mb-4 flex items-center justify-between gap-4">
+          <h2 id="recentes-titulo" class="text-lg font-bold text-foreground">Notas recentes</h2>
+          <!-- <a routerLink="/notas/listar" [class]="ui.link + ' text-sm'">Ver todas →</a> -->
+        </div>
+
+        @if (carregandoNotas()) {
+        <div role="status">
+          <p class="sr-only">Carregando notas...</p>
+          <div class="space-y-3" aria-hidden="true">
+            @for (item of [1, 2, 3]; track item) {
+            <div class="animate-pulse rounded-2xl border border-border bg-card p-5 shadow-card">
+              <div class="h-4 w-1/2 rounded bg-muted"></div>
+              <div class="mt-3 h-3 w-3/4 rounded bg-muted"></div>
+            </div>
+            }
+          </div>
+        </div>
+        } @else if (mensagemErroNotas()) {
+        <div [class]="ui.alertaErro" role="alert">{{ mensagemErroNotas() }}</div>
+        } @else if (notasRecentes().length > 0) {
+        <ul class="space-y-3">
+          @for (nota of notasRecentes(); track nota.id) {
+          <li>
+            <a [routerLink]="['/notas/detalhes', nota.id]"
+              class="block rounded-2xl border border-border bg-card p-5 shadow-card transition hover:-translate-y-0.5 hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+              <div class="flex items-start justify-between gap-3">
+                <h3 class="min-w-0 font-semibold break-words text-foreground">
+                  {{ nota.titulo }}
+                </h3>
+                <app-status-badge class="shrink-0" [status]="nota.status" />
+              </div>
+              @if (nota.descricao) {
+              <p class="mt-1 line-clamp-1 text-sm text-muted-foreground">
+                {{ nota.descricao }}
+              </p>
+              }
+              <div class="mt-3 flex flex-wrap items-center gap-1.5">
+                @for (categoria of nota.categorias; track categoria.id) {
+                <span appCategoryBadge [categoria]="categoria"></span>
+                }
+                <time class="ml-auto text-xs text-muted-foreground" [attr.datetime]="dataDaNota(nota)"
+                  [attr.title]="formatarData(dataDaNota(nota))">{{ formatarTempoRelativo(dataDaNota(nota)) }}</time>
+              </div>
             </a>
-
-            <a
-              routerLink="/auth/login"
-              class="rounded-xl border border-slate-300 bg-white px-5 py-3.5 text-sm font-semibold text-slate-800 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700"
-              >Já tenho uma conta</a
-            >
-          </div>
+          </li>
+          }
+        </ul>
+        } @else {
+        <div class="rounded-2xl border border-dashed border-border bg-card p-10 text-center">
+          <p class="font-semibold text-foreground">Nenhuma nota encontrada</p>
+          <p class="mt-1 text-sm text-muted-foreground">Comece criando sua primeira nota.</p>
+          <a routerLink="/notas/cadastrar" [class]="ui.botaoPrimario + ' mt-4'">
+            <svg lucidePlus class="size-4" aria-hidden="true"></svg> Criar nota
+          </a>
         </div>
+        }
+      </section>
 
-        <div
-          class="relative rounded-3xl bg-[#101b36] p-8 text-white shadow-xl shadow-indigo-950/10 sm:p-10"
-        >
-          <div
-            class="absolute -right-5 -top-5 grid size-16 place-items-center rounded-2xl bg-cyan-300 text-[#101b36] shadow-lg"
-            aria-hidden="true"
-          >
-            <svg lucideAward class="size-8" strokeWidth="1.7"></svg>
-          </div>
-          <p class="text-sm font-medium text-cyan-200">TUDO NO SEU LUGAR</p>
-          <h2 class="mt-6 text-3xl font-semibold leading-tight">
-            Capture suas ideias. Organize o que importa.
-          </h2>
-          <p class="mt-4 leading-7 text-slate-300">
-            Crie notas, agrupe-as por categorias e encontre suas informações com mais facilidade.
-          </p>
-          <div class="mt-10 flex items-center gap-4 border-t border-white/10 pt-6">
-            <span
-              class="grid size-10 place-items-center rounded-full bg-white/10 text-cyan-200"
-              aria-hidden="true"
-              ><svg lucideSparkles class="size-5"></svg
-            ></span>
-            <p class="text-sm text-slate-300">
-              Uma boa ideia merece ser encontrada quando você precisar.
-            </p>
-          </div>
+      <aside class="space-y-4" aria-labelledby="acesso-rapido-titulo">
+        <h2 id="acesso-rapido-titulo" class="text-lg font-bold text-foreground">
+          Acesso rápido
+        </h2>
+        <a routerLink="/notas/listar"
+          class="group flex items-center gap-4 rounded-2xl border border-border bg-card p-4 shadow-card transition hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+          <span class="grid size-11 place-items-center rounded-xl bg-accent text-accent-foreground"
+            aria-hidden="true"><svg lucideNotebookText class="size-5"></svg></span>
+          <span class="flex-1">
+            <span class="block font-semibold text-foreground">Notas</span>
+            <span class="block text-sm text-muted-foreground">Ver, buscar e filtrar</span>
+          </span>
+          <svg lucideArrowRight
+            class="size-4 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-primary"
+            aria-hidden="true"></svg>
+        </a>
+        <a routerLink="/categorias/listar"
+          class="group flex items-center gap-4 rounded-2xl border border-border bg-card p-4 shadow-card transition hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+          <span class="grid size-11 place-items-center rounded-xl bg-accent text-accent-foreground"
+            aria-hidden="true"><svg lucideFolderOpen class="size-5"></svg></span>
+          <span class="flex-1">
+            <span class="block font-semibold text-foreground">Categorias</span>
+            <span class="block text-sm text-muted-foreground">Organizar assuntos</span>
+          </span>
+          <svg lucideArrowRight
+            class="size-4 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-primary"
+            aria-hidden="true"></svg>
+        </a>
+
+        <!-- @if (carregandoCategorias()) {
+        <p class="text-sm text-muted-foreground" role="status">Carregando categorias...</p>
+        } @else if (mensagemErroCategorias()) {
+        <div [class]="ui.alertaErro" role="alert">{{ mensagemErroCategorias() }}</div>
+        } @else if (categorias().length > 0) {
+        <div class="rounded-2xl border border-border bg-card p-5 shadow-card">
+          <h3 class="mb-3 text-sm font-semibold text-foreground">Suas categorias</h3>
+          <ul class="flex flex-wrap gap-2">
+            @for (categoria of categorias(); track categoria.id) {
+            <li class="max-w-full">
+              <a appCategoryBadge [categoria]="categoria" [routerLink]="['/categorias/detalhes', categoria.id]"></a>
+            </li>
+            }
+          </ul>
+        </div>
+        } -->
+      </aside>
+    </div>
+    } @else {
+    <section class="grid items-center gap-12 py-8 lg:grid-cols-2 lg:py-16" aria-labelledby="home-titulo">
+      <div>
+        <span
+          class="inline-flex items-center gap-2 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
+          <span class="size-1.5 rounded-full bg-primary" aria-hidden="true"></span>
+          Suas notas, num só lugar
+        </span>
+        <h1 id="home-titulo"
+          class="mt-5 text-4xl leading-[1.1] font-extrabold tracking-tight text-foreground sm:text-6xl">
+          Cada ideia no
+          <span class="bg-brand bg-clip-text text-transparent">seu lugar.</span>
+        </h1>
+        <p class="mt-5 max-w-md text-lg text-muted-foreground">
+          Escreva, separe por categorias coloridas e encontre tudo rapidinho. Sem complicação.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a routerLink="/auth/cadastro" [class]="ui.botaoPrimario + ' h-11 px-6'">
+            Começar agora <svg lucideArrowRight class="size-4" aria-hidden="true"></svg>
+          </a>
+          <a routerLink="/auth/login" [class]="ui.botaoContorno + ' h-11 px-6'">Já tenho uma conta</a>
         </div>
       </div>
+      <div class="relative">
+        <div class="absolute inset-6 -z-10 rounded-[3rem] bg-accent" aria-hidden="true"></div>
+        <app-notes-collage class="h-96" />
+      </div>
+    </section>
+
+    <section class="grid gap-4 border-t border-border py-12 sm:grid-cols-3" aria-label="Recursos">
+      @for (recurso of recursos; track recurso.titulo) {
+      <div class="flex gap-4">
+        <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground"
+          aria-hidden="true">
+          @switch (recurso.icone) {
+          @case ('escrever') {
+          <svg lucidePenLine class="size-5"></svg>
+          }
+          @case ('categorias') {
+          <svg lucideTags class="size-5"></svg>
+          }
+          @case ('buscar') {
+          <svg lucideSearch class="size-5"></svg>
+          }
+          }
+        </span>
+        <div>
+          <h2 class="font-semibold text-foreground">{{ recurso.titulo }}</h2>
+          <p class="text-sm text-muted-foreground">{{ recurso.texto }}</p>
+        </div>
+      </div>
+      }
+    </section>
     }
-  </section>
-</main>
+  </main>
+</div>
