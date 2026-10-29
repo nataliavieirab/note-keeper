@@ -2,15 +2,19 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { form, FormField, maxLength, minLength, required } from '@angular/forms/signals';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { LucideNotebookPen } from '@lucide/angular';
 import { ApiValidationProblemDetails } from '../../auth/auth.models';
 import { CategoriaDto } from '../../categorias/categorias.models';
 import { CategoriasService } from '../../categorias/categorias.service';
+import { CategoryBadge } from '../../shared/ui/category-badge';
+import { inputCls, UI } from '../../shared/ui/classes';
+import { PageHeader } from '../../shared/ui/page-header';
 import { NotaFormModel } from '../cadastrar/cadastrar-nota';
 import { AtualizarNotaRequest, StatusNota } from '../notas.models';
 import { NotasService } from '../notas.service';
 
 @Component({
-  imports: [FormField, RouterLink],
+  imports: [CategoryBadge, FormField, LucideNotebookPen, PageHeader, RouterLink],
   selector: 'app-editar-nota',
   templateUrl: './editar-nota.html',
 })
@@ -21,6 +25,8 @@ export class EditarNota {
   private readonly route = inject(ActivatedRoute);
   private readonly notaId: string | null;
 
+  protected readonly ui = UI;
+  protected readonly inputCls = inputCls;
   protected readonly carregando = signal(true);
   protected readonly formularioVisivel = signal(false);
   protected readonly enviandoFormulario = signal(false);

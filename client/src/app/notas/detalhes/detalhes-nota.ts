@@ -1,12 +1,25 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { LucideArrowLeft, LucidePencil, LucideTrash } from '@lucide/angular';
 import { ApiValidationProblemDetails } from '../../auth/auth.models';
+import { CategoryBadge } from '../../shared/ui/category-badge';
+import { UI } from '../../shared/ui/classes';
+import { ConfirmDialog } from '../../shared/ui/confirm-dialog';
+import { StatusBadge } from '../../shared/ui/status-badge';
 import { NotaDto } from '../notas.models';
 import { NotasService } from '../notas.service';
 
 @Component({
-  imports: [RouterLink],
+  imports: [
+    CategoryBadge,
+    ConfirmDialog,
+    LucideArrowLeft,
+    LucidePencil,
+    LucideTrash,
+    RouterLink,
+    StatusBadge,
+  ],
   selector: 'app-detalhes-nota',
   templateUrl: './detalhes-nota.html',
 })
@@ -16,6 +29,7 @@ export class DetalhesNota {
   private readonly notasService = inject(NotasService);
   private readonly notaId: string | null;
 
+  protected readonly ui = UI;
   protected readonly nota = signal<NotaDto | null>(null);
   protected readonly carregando = signal(true);
   protected readonly mensagemErro = signal('');

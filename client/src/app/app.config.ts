@@ -53,14 +53,14 @@ const routes: Routes = [
     ],
   },
   {
+    path: 'notas/listar',
+    loadComponent: () => import('./notas/listar/listar-notas').then((c) => c.ListarNotas),
+  },
+  {
     path: 'notas',
     loadComponent: () => import('./notas/shell/notas-shell').then((c) => c.NotasShell),
     children: [
       { path: '', redirectTo: 'listar', pathMatch: 'full' },
-      {
-        path: 'listar',
-        loadComponent: () => import('./notas/listar/listar-notas').then((c) => c.ListarNotas),
-      },
       {
         path: 'detalhes/:notaId',
         loadComponent: () => import('./notas/detalhes/detalhes-nota').then((c) => c.DetalhesNota),

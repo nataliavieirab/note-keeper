@@ -1,40 +1,34 @@
-<section class="mx-auto max-w-2xl" aria-labelledby="editar-nota-titulo">
-  <div class="mb-6">
-    <p class="mb-2 text-sm font-semibold tracking-wide text-indigo-700">GESTÃO DE NOTAS</p>
-    <h1 id="editar-nota-titulo" class="text-3xl font-semibold tracking-tight text-slate-950">
-      Editar nota
-    </h1>
-    <p class="mt-2 text-slate-600">Atualize o título, a descrição, o status e as categorias.</p>
-  </div>
+<section aria-labelledby="editar-nota-titulo">
+  <app-page-header
+    voltarPara="/notas/listar"
+    voltarRotulo="Minhas notas"
+    titulo="Editar nota"
+    subtitulo="Atualize o título, a descrição, o status e as categorias."
+    tituloId="editar-nota-titulo"
+  >
+    <svg lucideNotebookPen class="size-5"></svg>
+  </app-page-header>
 
   @if (mensagemErro()) {
-    <div
-      class="mb-6 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm whitespace-pre-line text-rose-900"
-      role="alert"
-    >
-      {{ mensagemErro() }}
-    </div>
+    <div [class]="ui.alertaErro + ' mb-6'" role="alert">{{ mensagemErro() }}</div>
   }
 
   @if (carregando()) {
-    <p class="rounded-2xl border border-slate-200 bg-white p-6 text-slate-600" role="status">
-      Carregando nota...
-    </p>
+    <p [class]="ui.painel + ' text-muted-foreground'" role="status">Carregando nota...</p>
   } @else if (formularioVisivel()) {
-    <form
-      (submit)="atualizarNota($event)"
-      novalidate
-      class="space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
-    >
+    <form (submit)="atualizarNota($event)" novalidate [class]="ui.painel + ' space-y-6'">
       <div>
-        <label for="nota-titulo" class="mb-1.5 block text-sm font-medium text-slate-800"
-          >Título</label
-        >
+        <label for="nota-titulo" [class]="ui.label + ' mb-1.5'">
+          Título
+          <span class="font-normal text-muted-foreground"
+            >{{ modeloNota().titulo.length }}/100</span
+          >
+        </label>
         <input
           id="nota-titulo"
           type="text"
           autocomplete="off"
-          class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/15 aria-[invalid=true]:border-rose-600"
+          [class]="inputCls(formularioNota.titulo().touched() && formularioNota.titulo().invalid())"
           [formField]="formularioNota.titulo"
           [attr.aria-invalid]="
             formularioNota.titulo().touched() && formularioNota.titulo().invalid()
@@ -45,22 +39,28 @@
               : null
           "
         />
-
         @if (formularioNota.titulo().touched() && formularioNota.titulo().invalid()) {
-          <p id="nota-titulo-erro" class="mt-1 text-sm text-rose-700">
+          <p id="nota-titulo-erro" [class]="ui.erroCampo">
             {{ formularioNota.titulo().errors()[0].message }}
           </p>
         }
       </div>
 
       <div>
-        <label for="nota-descricao" class="mb-1.5 block text-sm font-medium text-slate-800"
-          >Descrição</label
-        >
+        <label for="nota-descricao" [class]="ui.label + ' mb-1.5'">
+          Descrição
+          <span class="font-normal text-muted-foreground"
+            >{{ modeloNota().descricao.length }}/300</span
+          >
+        </label>
         <textarea
           id="nota-descricao"
-          rows="5"
-          class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/15 aria-[invalid=true]:border-rose-600"
+          rows="8"
+          [class]="
+            inputCls(
+              formularioNota.descricao().touched() && formularioNota.descricao().invalid()
+            ) + ' resize-none'
+          "
           [formField]="formularioNota.descricao"
           [attr.aria-invalid]="
             formularioNota.descricao().touched() && formularioNota.descricao().invalid()
@@ -68,108 +68,102 @@
           [attr.aria-describedby]="
             formularioNota.descricao().touched() && formularioNota.descricao().invalid()
               ? 'nota-descricao-erro'
-              : null
+              : 'nota-descricao-dica'
           "
         ></textarea>
-        <p class="mt-1 text-sm text-slate-500">Opcional. Até 300 caracteres.</p>
-
         @if (formularioNota.descricao().touched() && formularioNota.descricao().invalid()) {
-          <p id="nota-descricao-erro" class="mt-1 text-sm text-rose-700">
+          <p id="nota-descricao-erro" [class]="ui.erroCampo">
             {{ formularioNota.descricao().errors()[0].message }}
           </p>
+        } @else {
+          <p id="nota-descricao-dica" [class]="ui.dicaCampo">Opcional. Até 300 caracteres.</p>
         }
       </div>
 
-      <fieldset>
-        <legend class="mb-1.5 block text-sm font-medium text-slate-800">Status</legend>
-        <div class="flex flex-wrap gap-2">
+      <div role="radiogroup" aria-labelledby="nota-status-legenda">
+        <span id="nota-status-legenda" class="text-sm font-semibold text-foreground">Status</span>
+        <div class="mt-2 inline-flex rounded-xl bg-muted p-1">
           <label
-            class="flex items-center gap-3 rounded-xl border border-slate-200 px-3 py-2.5 text-sm text-slate-800 hover:border-indigo-300"
-            [class.border-indigo-600]="statusSelecionado() === 'Ativa'"
-            [class.bg-indigo-50]="statusSelecionado() === 'Ativa'"
+            class="cursor-pointer rounded-lg px-4 py-1.5 text-sm font-semibold transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring"
+            [class]="
+              statusSelecionado() === 'Ativa'
+                ? 'bg-card text-foreground shadow-card'
+                : 'text-muted-foreground'
+            "
           >
             <input
               type="radio"
               name="nota-status"
-              class="size-4 border-slate-300 text-indigo-700 focus:ring-indigo-600"
+              class="sr-only"
               [checked]="statusSelecionado() === 'Ativa'"
               (change)="definirStatus('Ativa')"
             />
             Ativa
           </label>
           <label
-            class="flex items-center gap-3 rounded-xl border border-slate-200 px-3 py-2.5 text-sm text-slate-800 hover:border-indigo-300"
-            [class.border-indigo-600]="statusSelecionado() === 'Arquivada'"
-            [class.bg-indigo-50]="statusSelecionado() === 'Arquivada'"
+            class="cursor-pointer rounded-lg px-4 py-1.5 text-sm font-semibold transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring"
+            [class]="
+              statusSelecionado() === 'Arquivada'
+                ? 'bg-card text-foreground shadow-card'
+                : 'text-muted-foreground'
+            "
           >
             <input
               type="radio"
               name="nota-status"
-              class="size-4 border-slate-300 text-indigo-700 focus:ring-indigo-600"
+              class="sr-only"
               [checked]="statusSelecionado() === 'Arquivada'"
               (change)="definirStatus('Arquivada')"
             />
             Arquivada
           </label>
         </div>
-      </fieldset>
+      </div>
 
       <fieldset>
-        <legend class="mb-1.5 block text-sm font-medium text-slate-800">Categorias</legend>
-        <p class="mb-3 text-sm text-slate-500">Opcional. Selecione uma ou mais categorias.</p>
+        <legend class="text-sm font-semibold text-foreground">Categorias</legend>
+        <p class="mt-1 mb-3 text-xs text-muted-foreground">
+          Opcional. Selecione uma ou mais categorias.
+        </p>
 
         @if (carregandoCategorias()) {
-          <p class="text-sm text-slate-600" role="status">Carregando categorias...</p>
+          <p class="text-sm text-muted-foreground" role="status">Carregando categorias...</p>
         } @else if (!categoriasCarregadas()) {
-          <p class="text-sm text-slate-600">As categorias não puderam ser carregadas.</p>
+          <p class="text-sm text-muted-foreground">As categorias não puderam ser carregadas.</p>
         } @else if (categorias().length === 0) {
-          <p
-            class="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-600"
-          >
+          <p class="text-sm text-muted-foreground">
             Nenhuma categoria cadastrada.
-            <a
-              routerLink="/categorias/cadastrar"
-              class="font-semibold text-indigo-700 hover:text-indigo-800"
-              >Cadastrar categoria</a
-            >
+            <a routerLink="/categorias/cadastrar" [class]="ui.link">Cadastrar categoria</a>
           </p>
         } @else {
-          <ul class="space-y-2">
+          <ul class="flex flex-wrap gap-2">
             @for (categoria of categorias(); track categoria.id) {
-              <li>
-                <label
-                  class="flex items-center gap-3 rounded-xl border border-slate-200 px-3 py-2.5 text-sm text-slate-800 hover:border-indigo-300"
-                  [class.border-indigo-600]="categoriaSelecionada(categoria.id)"
-                  [class.bg-indigo-50]="categoriaSelecionada(categoria.id)"
-                >
-                  <input
-                    #categoriaCheckbox
-                    type="checkbox"
-                    class="size-4 rounded border-slate-300 text-indigo-700 focus:ring-indigo-600"
-                    [checked]="categoriaSelecionada(categoria.id)"
-                    (change)="alternarCategoria(categoria.id, categoriaCheckbox.checked)"
-                  />
-                  <span class="break-words">{{ categoria.titulo }}</span>
-                </label>
+              <li class="max-w-full">
+                <button
+                  type="button"
+                  appCategoryBadge
+                  [categoria]="categoria"
+                  tamanho="md"
+                  [ativo]="categoriaSelecionada(categoria.id)"
+                  [attr.aria-pressed]="categoriaSelecionada(categoria.id)"
+                  (click)="alternarCategoria(categoria.id, !categoriaSelecionada(categoria.id))"
+                ></button>
               </li>
             }
           </ul>
         }
       </fieldset>
 
-      <div class="flex flex-wrap justify-end gap-3 pt-2">
+      <div class="flex flex-wrap justify-end gap-2 border-t border-border pt-5">
+        <a routerLink="/notas/listar" [class]="ui.botaoFantasma">Cancelar</a>
         <button
           type="submit"
+          [class]="ui.botaoPrimario"
           [disabled]="enviandoFormulario() || carregandoCategorias()"
-          class="rounded-xl bg-indigo-700 px-5 py-3 text-sm font-semibold text-white hover:bg-indigo-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700 disabled:cursor-wait disabled:opacity-70"
+          [attr.aria-busy]="enviandoFormulario()"
         >
           {{ enviandoFormulario() ? 'Salvando...' : 'Salvar alterações' }}
         </button>
-        <a
-          routerLink="/notas/listar"
-          class="rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700"
-          >Cancelar</a
-        >
       </div>
     </form>
   }

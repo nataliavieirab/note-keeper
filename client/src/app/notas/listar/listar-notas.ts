@@ -1,22 +1,68 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { LucideFileText } from '@lucide/angular';
+import { Component, computed, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import {
+  LucideCalendar,
+  LucideFileText,
+  LucidePencil,
+  LucidePlus,
+  LucideSearch,
+  LucideTrash,
+  LucideX,
+} from '@lucide/angular';
+import { map } from 'rxjs';
 import { ApiValidationProblemDetails } from '../../auth/auth.models';
 import { CategoriaDto } from '../../categorias/categorias.models';
 import { CategoriasService } from '../../categorias/categorias.service';
+import { formatarData, formatarTempoRelativo } from '../../shared/datas';
+import { Navbar } from '../../shared/navbar/navbar';
+import { CategoryBadge } from '../../shared/ui/category-badge';
+import { UI } from '../../shared/ui/classes';
+import { ConfirmDialog } from '../../shared/ui/confirm-dialog';
+import { EmptyState } from '../../shared/ui/empty-state';
+import { StatusBadge } from '../../shared/ui/status-badge';
 import { NotaDto } from '../notas.models';
 import { NotasService } from '../notas.service';
 
+function normalizarTexto(valor: string): string {
+  return valor
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
 @Component({
-  imports: [LucideFileText, RouterLink],
+  imports: [
+    CategoryBadge,
+    ConfirmDialog,
+    EmptyState,
+    LucideCalendar,
+    LucideFileText,
+    LucidePencil,
+    LucidePlus,
+    LucideSearch,
+    LucideTrash,
+    LucideX,
+    Navbar,
+    RouterLink,
+    StatusBadge,
+  ],
   selector: 'app-listar-notas',
   templateUrl: './listar-notas.html',
+  host: { class: 'block' },
 })
 export class ListarNotas {
   private readonly notasService = inject(NotasService);
   private readonly categoriasService = inject(CategoriasService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private requisicaoNotas = 0;
+
+  protected readonly ui = UI;
+  protected readonly formatarData = formatarData;
+  protected readonly formatarTempoRelativo = formatarTempoRelativo;
+  protected readonly esqueleto = [1, 2, 3, 4, 5, 6];
 
   protected readonly notas = signal<readonly NotaDto[]>([]);
   protected readonly carregando = signal(true);
@@ -28,6 +74,21 @@ export class ListarNotas {
   protected readonly categoriaIdsSelecionadas = signal<readonly string[]>([]);
   protected readonly notaIdEmExclusao = signal<string | null>(null);
   protected readonly excluindo = signal(false);
+  protected readonly termoBusca = toSignal(
+    this.route.queryParamMap.pipe(map((parametros) => parametros.get('busca') ?? '')),
+    { initialValue: '' },
+  );
+  protected readonly notasFiltradas = computed(() => {
+    const termo = normalizarTexto(this.termoBusca().trim());
+    const notas = this.notas();
+
+    if (!termo) return notas;
+
+    return notas.filter((nota) => normalizarTexto(nota.titulo).includes(termo));
+  });
+  protected readonly temCriterios = computed(
+    () => this.categoriaIdsSelecionadas().length > 0 || this.termoBusca().trim().length > 0,
+  );
 
   constructor() {
     this.carregarCategorias();
@@ -38,8 +99,10 @@ export class ListarNotas {
     return this.categoriaIdsSelecionadas().includes(categoriaId);
   }
 
-  protected alternarCategoria(categoriaId: string, selecionada: boolean): void {
+  protected alternarCategoria(categoriaId: string): void {
     if (this.excluindo()) return;
+
+    const selecionada = !this.categoriaSelecionada(categoriaId);
 
     this.categoriaIdsSelecionadas.update((ids) => {
       if (selecionada) {
@@ -52,15 +115,22 @@ export class ListarNotas {
     this.carregarNotas();
   }
 
-  protected formatarData(valor: string): string {
-    const data = new Date(valor);
+  protected limparBuscaEFiltros(): void {
+    if (this.excluindo()) return;
 
-    if (Number.isNaN(data.getTime())) return valor;
+    const tinhaCategorias = this.categoriaIdsSelecionadas().length > 0;
+    this.categoriaIdsSelecionadas.set([]);
 
-    return new Intl.DateTimeFormat('pt-BR', {
-      dateStyle: 'short',
-      timeStyle: 'short',
-    }).format(data);
+    if (tinhaCategorias) this.carregarNotas();
+
+    void this.router.navigate(['/notas/listar'], {
+      queryParams: { busca: null },
+      replaceUrl: true,
+    });
+  }
+
+  protected dataDaNota(nota: NotaDto): string {
+    return nota.atualizadoEm || nota.criadoEm;
   }
 
   protected abrirConfirmacao(notaId: string): void {

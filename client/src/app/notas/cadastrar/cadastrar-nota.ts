@@ -2,9 +2,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { form, FormField, maxLength, minLength, required } from '@angular/forms/signals';
 import { Router, RouterLink } from '@angular/router';
+import { LucideNotebookPen } from '@lucide/angular';
 import { ApiValidationProblemDetails } from '../../auth/auth.models';
 import { CategoriaDto } from '../../categorias/categorias.models';
 import { CategoriasService } from '../../categorias/categorias.service';
+import { CategoryBadge } from '../../shared/ui/category-badge';
+import { inputCls, UI } from '../../shared/ui/classes';
+import { PageHeader } from '../../shared/ui/page-header';
 import { CriarNotaRequest } from '../notas.models';
 import { NotasService } from '../notas.service';
 
@@ -14,7 +18,7 @@ export interface NotaFormModel {
 }
 
 @Component({
-  imports: [FormField, RouterLink],
+  imports: [CategoryBadge, FormField, LucideNotebookPen, PageHeader, RouterLink],
   selector: 'app-cadastrar-nota',
   templateUrl: './cadastrar-nota.html',
 })
@@ -23,6 +27,8 @@ export class CadastrarNota {
   private readonly categoriasService = inject(CategoriasService);
   private readonly router = inject(Router);
 
+  protected readonly ui = UI;
+  protected readonly inputCls = inputCls;
   protected readonly enviandoFormulario = signal(false);
   protected readonly carregandoCategorias = signal(true);
   protected readonly categoriasCarregadas = signal(false);
