@@ -11,6 +11,7 @@ import {
 import { AuthService } from '../auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observer } from 'rxjs';
+import { inputCls, UI } from '../../shared/ui/classes';
 
 interface LoginFormModel {
   readonly email: string;
@@ -25,6 +26,9 @@ interface LoginFormModel {
 export class Login {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+
+  protected readonly ui = UI;
+  protected readonly inputCls = inputCls;
 
   protected readonly modeloFormulario = signal<LoginFormModel>({ email: '', senha: '' });
   protected readonly formularioLogin = form(this.modeloFormulario, (modelo) => {

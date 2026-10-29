@@ -11,6 +11,7 @@ import {
 } from '../auth.models';
 import { Observer } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { inputCls, UI } from '../../shared/ui/classes';
 
 interface CadastroFormModel {
   readonly nome: string;
@@ -25,6 +26,9 @@ interface CadastroFormModel {
 export class Cadastro {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+
+  protected readonly ui = UI;
+  protected readonly inputCls = inputCls;
 
   private readonly tituloPagina = viewChild<ElementRef<HTMLHeadingElement>>('tituloPagina');
 
