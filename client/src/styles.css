@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:is(.dark *));
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -92,11 +94,53 @@
   --shadow-float: 0 10px 30px -8px color-mix(in oklab, var(--primary) 55%, transparent);
 }
 
+/*
+ * Dark theme: same design language, layered dark surfaces (no pure black).
+ * Light mode above remains the default and visual source of truth.
+ * --cat-9 through --cat-19, --gradient-brand, and --shadow-float stay inherited.
+ */
+.dark {
+  --background: oklch(0.17 0.015 264);
+  --foreground: oklch(0.93 0.01 264);
+  --card: oklch(0.215 0.015 264);
+  --primary: oklch(0.63 0.2 275);
+  --primary-glow: oklch(0.68 0.22 300);
+  --primary-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.24 0.012 264);
+  --muted-foreground: oklch(0.7 0.02 264);
+  --accent: oklch(0.3 0.05 275);
+  --accent-foreground: oklch(0.84 0.08 275);
+  --destructive: oklch(0.62 0.2 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --success: oklch(0.72 0.15 155);
+  --success-soft: oklch(0.27 0.04 155);
+  --border: oklch(0.3 0.012 264);
+  --input: oklch(0.32 0.015 264);
+  --ring: oklch(0.63 0.2 275);
+  --cat-1: oklch(0.55 0.17 255);
+  --cat-2: oklch(0.6 0.16 50);
+  --cat-3: oklch(0.55 0.2 300);
+  --cat-4: oklch(0.58 0.12 210);
+  --cat-5: oklch(0.57 0.15 150);
+  --cat-6: oklch(0.56 0.2 355);
+  --cat-7: oklch(0.6 0.14 80);
+  --cat-8: oklch(0.52 0.18 275);
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.3), 0 4px 16px -6px oklch(0 0 0 / 0.45);
+}
+
 @utility bg-brand {
   background-image: var(--gradient-brand);
 }
 
 @layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  .dark {
+    color-scheme: dark;
+  }
+
   * {
     border-color: var(--color-border);
   }
@@ -106,5 +150,6 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 }

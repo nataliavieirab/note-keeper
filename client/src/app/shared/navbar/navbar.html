@@ -31,6 +31,20 @@
       </nav>
 
       <div class="ml-auto flex min-w-0 items-center gap-3 md:ml-0 md:justify-self-end">
+        <button
+          type="button"
+          (click)="alternarTema()"
+          class="rounded-lg p-2 text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          [attr.aria-label]="rotuloTema()"
+          [attr.title]="rotuloTema()"
+        >
+          @if (temaEscuro()) {
+            <svg lucideMoon class="size-4" aria-hidden="true"></svg>
+          } @else {
+            <svg lucideSun class="size-4" aria-hidden="true"></svg>
+          }
+        </button>
+
         <!--
         <form
           class="hidden md:block"
@@ -97,6 +111,19 @@
       </div>
     } @else {
       <div class="ml-auto flex items-center gap-2 md:col-start-3 md:ml-0 md:justify-self-end">
+        <button
+          type="button"
+          (click)="alternarTema()"
+          class="rounded-lg p-2 text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          [attr.aria-label]="rotuloTema()"
+          [attr.title]="rotuloTema()"
+        >
+          @if (temaEscuro()) {
+            <svg lucideMoon class="size-4" aria-hidden="true"></svg>
+          } @else {
+            <svg lucideSun class="size-4" aria-hidden="true"></svg>
+          }
+        </button>
         <a routerLink="/auth/login" [class]="classesEntrar">Entrar</a>
         <a routerLink="/auth/cadastro" [class]="classesCriarConta">Criar conta</a>
       </div>

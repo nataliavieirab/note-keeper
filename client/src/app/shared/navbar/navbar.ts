@@ -4,18 +4,30 @@ import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/rout
 import {
   LucideLogOut,
   LucideMenu,
+  LucideMoon,
   LucideNotebookPen,
   // LucideSearch,
+  LucideSun,
   LucideX,
 } from '@lucide/angular';
 import { filter, map } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
+import { TemaService } from '../tema/tema.service';
 import { BTN_GHOST, BTN_PRIMARY } from '../ui/classes';
 
 const CONSULTA_DESKTOP = '(min-width: 768px)';
 
 @Component({
-  imports: [LucideLogOut, LucideMenu, LucideNotebookPen, /* LucideSearch, */ LucideX, RouterLink],
+  imports: [
+    LucideLogOut,
+    LucideMenu,
+    LucideMoon,
+    LucideNotebookPen,
+    /* LucideSearch, */
+    LucideSun,
+    LucideX,
+    RouterLink,
+  ],
   selector: 'app-navbar',
   templateUrl: './navbar.html',
   host: { class: 'sticky top-0 z-20 block' },
@@ -26,8 +38,10 @@ export class Navbar {
   private readonly campoBusca = viewChild<ElementRef<HTMLInputElement>>('campoBusca');
   private readonly campoBuscaMenu = viewChild<ElementRef<HTMLInputElement>>('campoBuscaMenu');
 
+  private readonly temaService = inject(TemaService);
   protected readonly authService = inject(AuthService);
   protected readonly sessaoAutenticada = this.authService.sessao;
+  protected readonly temaEscuro = this.temaService.escuro;
   protected readonly classesEntrar = BTN_GHOST;
   protected readonly classesCriarConta = BTN_PRIMARY;
   protected readonly links = [
@@ -118,6 +132,14 @@ export class Navbar {
 
   protected alternarMenu(): void {
     this.menuAberto.update((aberto) => !aberto);
+  }
+
+  protected alternarTema(): void {
+    this.temaService.alternar();
+  }
+
+  protected rotuloTema(): string {
+    return this.temaEscuro() ? 'Mudar para modo claro' : 'Mudar para modo escuro';
   }
 
   protected sair(): void {
