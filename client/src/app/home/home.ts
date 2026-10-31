@@ -20,6 +20,7 @@ import { formatarData, formatarTempoRelativo } from '../shared/datas';
 import { Navbar } from '../shared/navbar/navbar';
 import { CategoryBadge } from '../shared/ui/category-badge';
 import { UI } from '../shared/ui/classes';
+import { NoteCategoryAccent } from '../shared/ui/note-category-accent';
 import { NotesCollage } from '../shared/ui/notes-collage';
 import { StatusBadge } from '../shared/ui/status-badge';
 
@@ -36,6 +37,7 @@ const QUANTIDADE_NOTAS_RECENTES = 4;
     LucideSearch,
     LucideTags,
     Navbar,
+    NoteCategoryAccent,
     NotesCollage,
     RouterLink,
     StatusBadge,
