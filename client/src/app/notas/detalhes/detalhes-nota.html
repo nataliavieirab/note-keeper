@@ -1,74 +1,129 @@
 @if (mensagemErro()) {
-  <div [class]="ui.alertaErro + ' mb-6'" role="alert">{{ mensagemErro() }}</div>
+<div [class]="ui.alertaErro + ' mb-6'" role="alert">{{ mensagemErro() }}</div>
 }
 
 @if (carregando()) {
-  <p [class]="ui.painel + ' text-muted-foreground'" role="status">Carregando nota...</p>
+<p [class]="ui.painel + ' text-muted-foreground'" role="status">Carregando nota...</p>
 } @else if (nota(); as nota) {
-  <article class="mx-auto max-w-2xl">
-    <a
-      routerLink="/notas/listar"
-      class="mb-4 inline-flex items-center gap-1.5 rounded text-sm font-semibold text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-    >
-      <svg lucideArrowLeft class="size-4" aria-hidden="true"></svg> Minhas notas
-    </a>
+<article>
+  <a routerLink="/notas/listar"
+    class="mb-4 inline-flex items-center gap-1.5 rounded text-sm font-semibold text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+    <svg lucideArrowLeft class="size-4" aria-hidden="true"></svg> Minhas notas
+  </a>
 
-    <div [class]="ui.painel">
-      <div class="flex flex-wrap items-center gap-2">
-        <app-status-badge [status]="nota.status" />
-        @if (nota.categorias.length === 0) {
-          <span class="text-xs text-muted-foreground">Nenhuma categoria</span>
-        }
-        @for (categoria of nota.categorias; track categoria.id) {
-          <span appCategoryBadge [categoria]="categoria"></span>
-        }
+  <div [class]="ui.painel">
+    <div class="min-w-0">
+      <app-status-badge [status]="nota.status" />
+      <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
+        <h1 class="min-w-0 text-3xl font-bold tracking-tight break-words text-foreground">
+          {{ nota.titulo }}
+        </h1>
+        <div class="flex shrink-0 flex-wrap justify-end gap-2">
+          <button type="button" [class]="ui.botaoPerigo" (click)="abrirConfirmacao()">
+            <svg lucideTrash class="size-4" aria-hidden="true"></svg> Excluir
+          </button>
+          <a [routerLink]="['/notas/editar', nota.id]" [class]="ui.botaoPrimario">
+            <svg lucidePencil class="size-4" aria-hidden="true"></svg> Editar
+          </a>
+        </div>
       </div>
+    </div>
 
-      <h1 class="mt-4 text-3xl font-bold tracking-tight break-words text-foreground">
-        {{ nota.titulo }}
-      </h1>
-
-      @if (nota.descricao) {
-        <p class="mt-4 leading-relaxed whitespace-pre-line text-foreground/80">
-          {{ nota.descricao }}
-        </p>
-      }
-
-      <dl class="mt-8 grid gap-3 border-t border-border pt-5 text-sm sm:grid-cols-2">
+    <!-- <dl class="mt-6 grid gap-4 border-t border-border pt-5 text-sm sm:grid-cols-2">
+      <div class="flex items-center gap-3">
+        <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground">
+          <svg lucideCalendarDays class="size-4" aria-hidden="true"></svg>
+        </span>
         <div>
           <dt class="text-muted-foreground">Criada em</dt>
           <dd class="font-medium text-foreground">
             <time [attr.datetime]="nota.criadoEm">{{ formatarData(nota.criadoEm) }}</time>
           </dd>
         </div>
-        @if (nota.atualizadoEm) {
-          <div>
-            <dt class="text-muted-foreground">Atualizada em</dt>
-            <dd class="font-medium text-foreground">
-              <time [attr.datetime]="nota.atualizadoEm">{{ formatarData(nota.atualizadoEm) }}</time>
-            </dd>
-          </div>
-        }
-      </dl>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground">
+          <svg lucideClock class="size-4" aria-hidden="true"></svg>
+        </span>
+        <div>
+          <dt class="text-muted-foreground">Última atualização</dt>
+          <dd class="font-medium text-foreground">
+            <time [attr.datetime]="nota.atualizadoEm">{{ formatarData(nota.atualizadoEm) }}</time>
+          </dd>
+        </div>
+      </div>
+    </dl> -->
 
-      <div class="mt-6 flex flex-wrap justify-end gap-2">
-        <button type="button" [class]="ui.botaoPerigo" (click)="abrirConfirmacao()">
-          <svg lucideTrash class="size-4" aria-hidden="true"></svg> Excluir
-        </button>
-        <a [routerLink]="['/notas/editar', nota.id]" [class]="ui.botaoPrimario">
-          <svg lucidePencil class="size-4" aria-hidden="true"></svg> Editar
-        </a>
+    <div class="mt-6 border-t border-border pt-5">
+      <span
+        class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        <svg lucideFileText class="size-3.5" aria-hidden="true"></svg> Descrição
+      </span>
+      @if (nota.descricao) {
+      <p class="mt-3 whitespace-pre-wrap leading-relaxed text-foreground/80">{{ nota.descricao }}</p>
+      } @else {
+      <p class="mt-3 whitespace-pre-wrap leading-relaxed text-foreground/80"><i class="text-muted-foreground">Sem
+          descrição.</i></p>
+      }
+    </div>
+
+    <div class="mt-6 border-t border-border pt-5">
+      <span
+        class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        <svg lucideFolderOpen class="size-3.5" aria-hidden="true"></svg> Categorias
+      </span>
+      <div class="mt-3 flex flex-wrap items-center gap-2">
+        @if (nota.categorias.length === 0) {
+        <span class="text-sm text-muted-foreground">Sem categorias.</span>
+        }
+        @for (categoria of nota.categorias; track categoria.id) {
+        <a [routerLink]="['/categorias/detalhes', categoria.id]" appCategoryBadge [categoria]="categoria"></a>
+        }
       </div>
     </div>
-  </article>
 
-  <app-confirm-dialog
-    [aberto]="confirmandoExclusao()"
-    titulo="Excluir nota?"
-    texto="Esta nota será removida."
-    rotuloConfirmar="Excluir nota"
-    [pendente]="excluindo()"
-    (confirmar)="confirmarExclusao()"
-    (cancelar)="cancelarExclusao()"
-  />
+    <!-- <div class="mt-6 border-t border-border pt-5">
+      <span
+        class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        <svg lucideFileText class="size-3.5" aria-hidden="true"></svg> Descrição
+      </span>
+      @if (nota.descricao) {
+      <p class="mt-3 whitespace-pre-wrap leading-relaxed text-foreground/80">{{ nota.descricao }}</p>
+      } @else {
+      <p class="mt-3 whitespace-pre-wrap leading-relaxed text-foreground/80"><i class="text-muted-foreground">Sem
+          descrição.</i></p>
+      }
+    </div> -->
+
+    <dl class="mt-6 grid gap-4 border-t border-border pt-5 text-sm sm:grid-cols-2">
+      <div class="flex items-center gap-3">
+        <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground">
+          <svg lucideCalendarDays class="size-4" aria-hidden="true"></svg>
+        </span>
+        <div>
+          <dt class="text-muted-foreground">Criada em</dt>
+          <dd class="font-medium text-foreground">
+            <time [attr.datetime]="nota.criadoEm">{{ formatarData(nota.criadoEm) }}</time>
+          </dd>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground">
+          <svg lucideClock class="size-4" aria-hidden="true"></svg>
+        </span>
+        <div>
+          <dt class="text-muted-foreground">Última atualização</dt>
+          <dd class="font-medium text-foreground">
+            <time [attr.datetime]="nota.atualizadoEm">{{ formatarData(nota.atualizadoEm) }}</time>
+          </dd>
+        </div>
+      </div>
+    </dl>
+
+  </div>
+</article>
+
+<app-confirm-dialog [aberto]="confirmandoExclusao()" titulo="Excluir nota?" texto="Esta nota será removida."
+  rotuloConfirmar="Excluir nota" [pendente]="excluindo()" (confirmar)="confirmarExclusao()"
+  (cancelar)="cancelarExclusao()" />
 }

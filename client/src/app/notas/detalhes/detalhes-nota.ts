@@ -1,7 +1,15 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { LucideArrowLeft, LucidePencil, LucideTrash } from '@lucide/angular';
+import {
+  LucideArrowLeft,
+  LucideCalendarDays,
+  LucideClock,
+  LucideFileText,
+  LucideFolderOpen,
+  LucidePencil,
+  LucideTrash,
+} from '@lucide/angular';
 import { ApiValidationProblemDetails } from '../../auth/auth.models';
 import { CategoriasService } from '../../categorias/categorias.service';
 import { CategoryBadge } from '../../shared/ui/category-badge';
@@ -16,6 +24,10 @@ import { NotasService } from '../notas.service';
     CategoryBadge,
     ConfirmDialog,
     LucideArrowLeft,
+    LucideCalendarDays,
+    LucideClock,
+    LucideFileText,
+    LucideFolderOpen,
     LucidePencil,
     LucideTrash,
     RouterLink,
@@ -72,7 +84,7 @@ export class DetalhesNota {
     if (Number.isNaN(data.getTime())) return valor;
 
     return new Intl.DateTimeFormat('pt-BR', {
-      dateStyle: 'short',
+      dateStyle: 'long',
       timeStyle: 'short',
     }).format(data);
   }
