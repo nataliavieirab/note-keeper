@@ -21,6 +21,7 @@ import { CategoryBadge } from '../../shared/ui/category-badge';
 import { UI } from '../../shared/ui/classes';
 import { ConfirmDialog } from '../../shared/ui/confirm-dialog';
 import { EmptyState } from '../../shared/ui/empty-state';
+import { NoteCategoryAccent } from '../../shared/ui/note-category-accent';
 import { StatusBadge } from '../../shared/ui/status-badge';
 import { NotaDto } from '../notas.models';
 import { NotasService } from '../notas.service';
@@ -45,6 +46,7 @@ function normalizarTexto(valor: string): string {
     LucideTrash,
     LucideX,
     Navbar,
+    NoteCategoryAccent,
     RouterLink,
     StatusBadge,
   ],

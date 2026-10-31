@@ -10,10 +10,10 @@
           </h1>
           <p class="text-sm text-muted-foreground">
             @if (carregando()) {
-              Carregando notas...
+            Carregando notas...
             } @else {
-              {{ notasFiltradas().length }}
-              {{ notasFiltradas().length === 1 ? 'nota encontrada' : 'notas encontradas' }}
+            {{ notasFiltradas().length }}
+            {{ notasFiltradas().length === 1 ? 'nota encontrada' : 'notas encontradas' }}
             }
           </p>
         </div>
@@ -24,204 +24,161 @@
 
       <div class="mt-6 space-y-3">
         @if (mensagemErroCategorias()) {
-          <div [class]="ui.alertaErro" role="alert">{{ mensagemErroCategorias() }}</div>
+        <div [class]="ui.alertaErro" role="alert">{{ mensagemErroCategorias() }}</div>
         } @else if (carregandoCategorias()) {
-          <p class="text-sm text-muted-foreground" role="status">Carregando categorias...</p>
+        <p class="text-sm text-muted-foreground" role="status">Carregando categorias...</p>
         } @else if (!categoriasCarregadas()) {
-          <p class="text-sm text-muted-foreground">As categorias não puderam ser carregadas.</p>
+        <p class="text-sm text-muted-foreground">As categorias não puderam ser carregadas.</p>
         } @else if (categorias().length === 0) {
-          <p class="text-sm text-muted-foreground">
-            Nenhuma categoria cadastrada. A lista exibe todas as notas.
-            <a routerLink="/categorias/cadastrar" [class]="ui.link">Cadastrar categoria</a>
-          </p>
+        <p class="text-sm text-muted-foreground">
+          Nenhuma categoria cadastrada. A lista exibe todas as notas.
+          <a routerLink="/categorias/cadastrar" [class]="ui.link">Cadastrar categoria</a>
+        </p>
         } @else {
-          <div>
-            <p id="filtro-categorias-dica" class="mb-2 text-xs text-muted-foreground">
-              Mostra notas com todas as categorias marcadas
-            </p>
-            <ul class="flex flex-wrap gap-2" aria-describedby="filtro-categorias-dica">
-              @for (categoria of categorias(); track categoria.id) {
-                <li class="max-w-full">
-                  <button
-                    type="button"
-                    appCategoryBadge
-                    [categoria]="categoria"
-                    tamanho="md"
-                    [colorido]="true"
-                    [ativo]="categoriaSelecionada(categoria.id)"
-                    [attr.aria-pressed]="categoriaSelecionada(categoria.id)"
-                    [disabled]="excluindo()"
-                    (click)="alternarCategoria(categoria.id)"
-                  ></button>
-                </li>
-              }
-            </ul>
-          </div>
+        <div>
+          <!-- <p id="filtro-categorias-dica" class="mb-2 text-xs text-muted-foreground">
+            Por categoria
+          </p> -->
+          <ul class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0"
+            aria-describedby="filtro-categorias-dica">
+            @for (categoria of categorias(); track categoria.id) {
+            <li class="shrink-0">
+              <button type="button" appCategoryBadge [categoria]="categoria" tamanho="md"
+                [ativo]="categoriaSelecionada(categoria.id)" [attr.aria-pressed]="categoriaSelecionada(categoria.id)"
+                [disabled]="excluindo()" (click)="alternarCategoria(categoria.id)"></button>
+            </li>
+            }
+          </ul>
+        </div>
         }
 
         @if (temCriterios()) {
-          <div class="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-            @if (termoBusca().trim()) {
-              <span
-                >Busca: <b class="text-foreground">“{{ termoBusca() }}”</b></span
-              >
-            }
-            <button
-              type="button"
-              class="inline-flex items-center gap-1 rounded font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50"
-              [disabled]="excluindo()"
-              (click)="limparBuscaEFiltros()"
-            >
-              <svg lucideX class="size-3.5" aria-hidden="true"></svg> Limpar busca e filtros
-            </button>
-          </div>
+        <div class="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+          @if (termoBusca().trim()) {
+          <span>Busca: <b class="text-foreground">“{{ termoBusca() }}”</b></span>
+          }
+          <button type="button"
+            class="inline-flex items-center gap-1 rounded font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50"
+            [disabled]="excluindo()" (click)="limparBuscaEFiltros()">
+            <svg lucideX class="size-3.5" aria-hidden="true"></svg> Limpar busca e filtros
+          </button>
+        </div>
         }
       </div>
 
       @if (mensagemErro()) {
-        <div [class]="ui.alertaErro + ' mt-6'" role="alert">{{ mensagemErro() }}</div>
+      <div [class]="ui.alertaErro + ' mt-6'" role="alert">{{ mensagemErro() }}</div>
       }
 
       <div class="mt-6">
         @if (carregando()) {
-          <div role="status">
-            <p class="sr-only">Carregando notas...</p>
-            <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
-              @for (item of esqueleto; track item) {
-                <li class="animate-pulse rounded-2xl border border-border bg-card p-5 shadow-card">
-                  <div class="flex items-center justify-between gap-3">
-                    <div class="h-4 w-2/3 rounded bg-muted"></div>
-                    <div class="h-3 w-16 rounded bg-muted"></div>
-                  </div>
-                  <div class="mt-3 space-y-2">
-                    <div class="h-3 rounded bg-muted"></div>
-                    <div class="h-3 rounded bg-muted"></div>
-                    <div class="h-3 w-4/5 rounded bg-muted"></div>
-                  </div>
-                  <div class="mt-4 h-5 w-20 rounded-full bg-muted"></div>
-                </li>
-              }
-            </ul>
-          </div>
-        } @else if (notasFiltradas().length > 0) {
-          <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            @for (nota of notasFiltradas(); track nota.id) {
-              <li class="min-w-0">
-                <article
-                  class="group relative flex h-full flex-col rounded-2xl border border-border bg-card p-5 shadow-card transition hover:border-primary/40 hover:shadow-float"
-                >
-                  <div class="flex items-start justify-between gap-3">
-                    <h2 class="min-w-0 flex-1 font-semibold break-words text-foreground">
-                      <a
-                        class="rounded after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                        [routerLink]="['/notas/detalhes', nota.id]"
-                        >{{ nota.titulo }}</a
-                      >
-                    </h2>
-                    <time
-                      class="flex shrink-0 items-center gap-1 text-xs whitespace-nowrap text-muted-foreground"
-                      [attr.datetime]="dataDaNota(nota)"
-                      [attr.title]="formatarData(dataDaNota(nota))"
-                    >
-                      <svg lucideCalendar class="size-3.5" aria-hidden="true"></svg>
-                      {{ formatarTempoRelativo(dataDaNota(nota)) }}
-                    </time>
-                  </div>
-
-                  @if (nota.descricao) {
-                    <p class="mt-2 line-clamp-3 text-sm break-words text-muted-foreground">
-                      {{ nota.descricao }}
-                    </p>
-                  } @else {
-                    <p class="mt-2 text-sm text-muted-foreground italic">Sem descrição</p>
-                  }
-
-                  <div class="mt-auto flex items-end justify-between gap-2 pt-4">
-                    <ul class="flex flex-wrap gap-1.5">
-                      @if (nota.status === 'Arquivada') {
-                        <li><app-status-badge [status]="nota.status" /></li>
-                      }
-                      @for (categoria of nota.categorias; track categoria.id) {
-                        <li class="max-w-full">
-                          <span appCategoryBadge [categoria]="categoria"></span>
-                        </li>
-                      }
-                    </ul>
-                    <div
-                      class="relative z-10 flex shrink-0 gap-0.5 opacity-100 transition sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
-                    >
-                      <a
-                        [routerLink]="['/notas/editar', nota.id]"
-                        aria-label="Editar"
-                        class="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      >
-                        <svg lucidePencil class="size-4" aria-hidden="true"></svg>
-                      </a>
-                      <button
-                        type="button"
-                        aria-label="Excluir"
-                        class="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
-                        [disabled]="excluindo()"
-                        (click)="abrirConfirmacao(nota.id)"
-                      >
-                        <svg lucideTrash class="size-4" aria-hidden="true"></svg>
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              </li>
+        <div role="status">
+          <p class="sr-only">Carregando notas...</p>
+          <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
+            @for (item of esqueleto; track item) {
+            <li class="animate-pulse rounded-2xl border border-border bg-card p-5 shadow-card">
+              <div class="flex items-center justify-between gap-3">
+                <div class="h-4 w-2/3 rounded bg-muted"></div>
+                <div class="h-3 w-16 rounded bg-muted"></div>
+              </div>
+              <div class="mt-3 space-y-2">
+                <div class="h-3 rounded bg-muted"></div>
+                <div class="h-3 rounded bg-muted"></div>
+                <div class="h-3 w-4/5 rounded bg-muted"></div>
+              </div>
+              <div class="mt-4 h-5 w-20 rounded-full bg-muted"></div>
+            </li>
             }
           </ul>
+        </div>
+        } @else if (notasFiltradas().length > 0) {
+        <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          @for (nota of notasFiltradas(); track nota.id) {
+          <li class="min-w-0">
+            <article
+              class="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-card transition hover:border-primary/40 hover:shadow-float">
+              <app-note-category-accent [categorias]="nota.categorias" />
+              <div class="flex items-start justify-between gap-3">
+                <h2 class="min-w-0 flex-1 font-semibold break-words text-foreground">
+                  <a class="rounded after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    [routerLink]="['/notas/detalhes', nota.id]">{{ nota.titulo }}</a>
+                </h2>
+                <time class="flex shrink-0 items-center gap-1 text-xs whitespace-nowrap text-muted-foreground"
+                  [attr.datetime]="dataDaNota(nota)" [attr.title]="formatarData(dataDaNota(nota))">
+                  <svg lucideCalendar class="size-3.5" aria-hidden="true"></svg>
+                  {{ formatarTempoRelativo(dataDaNota(nota)) }}
+                </time>
+              </div>
+
+              @if (nota.descricao) {
+              <p class="mt-2 line-clamp-3 text-sm break-words text-muted-foreground">
+                {{ nota.descricao }}
+              </p>
+              } @else {
+              <p class="mt-2 text-sm text-muted-foreground italic">Sem descrição</p>
+              }
+
+              <div class="mt-auto flex items-end justify-between gap-2 pt-4">
+                <ul class="flex flex-wrap gap-1.5">
+                  @if (nota.status === 'Arquivada') {
+                  <li><app-status-badge [status]="nota.status" /></li>
+                  }
+                  @for (categoria of nota.categorias; track categoria.id) {
+                  <li class="max-w-full">
+                    <span appCategoryBadge [categoria]="categoria"></span>
+                  </li>
+                  }
+                </ul>
+                <div
+                  class="relative z-10 flex shrink-0 gap-0.5 opacity-100 transition sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+                  <a [routerLink]="['/notas/editar', nota.id]" aria-label="Editar"
+                    class="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                    <svg lucidePencil class="size-4" aria-hidden="true"></svg>
+                  </a>
+                  <button type="button" aria-label="Excluir"
+                    class="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
+                    [disabled]="excluindo()" (click)="abrirConfirmacao(nota.id)">
+                    <svg lucideTrash class="size-4" aria-hidden="true"></svg>
+                  </button>
+                </div>
+              </div>
+            </article>
+          </li>
+          }
+        </ul>
         } @else if (!mensagemErro()) {
-          <app-empty-state
-            [titulo]="
+        <app-empty-state [titulo]="
               temCriterios()
                 ? 'Nenhuma nota corresponde aos critérios atuais'
                 : 'Nenhuma nota encontrada'
-            "
-            [texto]="temCriterios() ? '' : 'Comece criando sua primeira nota.'"
-          >
-            @if (temCriterios()) {
-              <svg icone lucideSearch class="size-5"></svg>
-            } @else {
-              <svg icone lucideFileText class="size-5"></svg>
-            }
-            @if (temCriterios()) {
-              <button
-                acao
-                type="button"
-                [class]="ui.botaoContorno"
-                [disabled]="excluindo()"
-                (click)="limparBuscaEFiltros()"
-              >
-                Limpar busca e filtros
-              </button>
-            } @else {
-              <a acao routerLink="/notas/cadastrar" [class]="ui.botaoPrimario">
-                <svg lucidePlus class="size-4" aria-hidden="true"></svg> Criar nota
-              </a>
-            }
-          </app-empty-state>
+            " [texto]="temCriterios() ? '' : 'Comece criando sua primeira nota.'">
+          @if (temCriterios()) {
+          <svg icone lucideSearch class="size-5"></svg>
+          } @else {
+          <svg icone lucideFileText class="size-5"></svg>
+          }
+          @if (temCriterios()) {
+          <button acao type="button" [class]="ui.botaoContorno" [disabled]="excluindo()"
+            (click)="limparBuscaEFiltros()">
+            Limpar busca e filtros
+          </button>
+          } @else {
+          <a acao routerLink="/notas/cadastrar" [class]="ui.botaoPrimario">
+            <svg lucidePlus class="size-4" aria-hidden="true"></svg> Criar nota
+          </a>
+          }
+        </app-empty-state>
         }
       </div>
     </section>
   </main>
 
-  <a
-    routerLink="/notas/cadastrar"
-    aria-label="Nova nota"
-    class="fixed right-6 bottom-6 z-10 grid size-14 place-items-center rounded-full bg-brand text-primary-foreground shadow-float transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:hidden"
-  >
+  <a routerLink="/notas/cadastrar" aria-label="Nova nota"
+    class="fixed right-6 bottom-6 z-10 grid size-14 place-items-center rounded-full bg-brand text-primary-foreground shadow-float transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:hidden">
     <svg lucidePlus class="size-6" aria-hidden="true"></svg>
   </a>
 
-  <app-confirm-dialog
-    [aberto]="notaIdEmExclusao() !== null"
-    titulo="Excluir nota?"
-    texto="Esta nota será removida."
-    rotuloConfirmar="Excluir nota"
-    [pendente]="excluindo()"
-    (confirmar)="confirmarExclusao()"
-    (cancelar)="cancelarExclusao()"
-  />
+  <app-confirm-dialog [aberto]="notaIdEmExclusao() !== null" titulo="Excluir nota?" texto="Esta nota será removida."
+    rotuloConfirmar="Excluir nota" [pendente]="excluindo()" (confirmar)="confirmarExclusao()"
+    (cancelar)="cancelarExclusao()" />
 </div>
