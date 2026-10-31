@@ -23,11 +23,11 @@ import { LucideArrowLeft } from '@lucide/angular';
         <ng-content />
       </span>
       <div class="min-w-0">
-        <h1 [id]="tituloId()" class="text-3xl font-bold tracking-tight text-foreground">
+        <h1 [id]="tituloId()" class="text-2xl font-bold tracking-tight text-foreground">
           {{ titulo() }}
         </h1>
         @if (subtitulo()) {
-          <p class="mt-1 text-muted-foreground">{{ subtitulo() }}</p>
+          <p class="mt-1 text-sm text-muted-foreground">{{ subtitulo() }}</p>
         }
       </div>
     </div>
