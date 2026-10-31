@@ -6,107 +6,87 @@
       </h1>
       <p class="text-sm text-muted-foreground">
         @if (carregando()) {
-          Carregando categorias...
+        Carregando categorias...
         } @else {
-          {{ categorias().length }}
-          {{ categorias().length === 1 ? 'categoria' : 'categorias' }}
+        {{ categorias().length }}
+        {{ categorias().length === 1 ? 'categoria' : 'categorias' }}
         }
       </p>
     </div>
     <a routerLink="/categorias/cadastrar" [class]="ui.botaoPrimario">
-      <svg lucidePlus class="size-4" aria-hidden="true"></svg> Cadastrar categoria
+      <svg lucidePlus class="size-4" aria-hidden="true"></svg> Nova Categoria
     </a>
   </div>
 
   @if (mensagemErro()) {
-    <div [class]="ui.alertaErro + ' mt-6'" role="alert">{{ mensagemErro() }}</div>
+  <div [class]="ui.alertaErro + ' mt-6'" role="alert">{{ mensagemErro() }}</div>
   }
 
   <div class="mt-6">
     @if (carregando()) {
-      <div role="status">
-        <p class="sr-only">Carregando categorias...</p>
-        <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
-          @for (item of [1, 2, 3]; track item) {
-            <li class="animate-pulse rounded-2xl border border-border bg-card p-5 shadow-card">
-              <div class="flex items-center gap-4">
-                <div class="size-11 rounded-xl bg-muted"></div>
-                <div class="h-4 w-1/2 rounded bg-muted"></div>
-              </div>
-            </li>
-          }
-        </ul>
-      </div>
-    } @else if (categorias().length === 0 && !mensagemErro()) {
-      <app-empty-state
-        titulo="Nenhuma categoria cadastrada"
-        texto="Cadastre uma categoria para começar a organizar suas notas."
-      >
-        <svg icone lucideFolderOpen class="size-5"></svg>
-        <a acao routerLink="/categorias/cadastrar" [class]="ui.botaoPrimario">
-          <svg lucidePlus class="size-4" aria-hidden="true"></svg> Cadastrar categoria
-        </a>
-      </app-empty-state>
-    } @else if (categorias().length > 0) {
-      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        @for (categoria of categorias(); track categoria.id) {
-          <li class="min-w-0">
-            <article
-              class="group relative flex items-center gap-4 rounded-2xl border border-border bg-card p-5 shadow-card transition hover:border-primary/40 hover:shadow-float"
-            >
-              <span
-                [class]="
-                  'grid size-11 shrink-0 place-items-center rounded-xl text-lg font-bold ' +
-                  corCategoria(categoria)
-                "
-                aria-hidden="true"
-                >{{ inicial(categoria.titulo) }}</span
-              >
-              <span class="min-w-0 flex-1">
-                <span class="block truncate font-semibold text-foreground">{{
-                  categoria.titulo
-                }}</span>
-                @if (contagemPorCategoria(); as contagens) {
-                  <span class="block text-sm text-muted-foreground">
-                    {{ contagens.get(categoria.id) ?? 0 }}
-                    {{ (contagens.get(categoria.id) ?? 0) === 1 ? 'nota' : 'notas' }}
-                  </span>
-                }
-              </span>
-              <div
-                class="relative z-10 flex shrink-0 gap-0.5 opacity-100 transition sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
-              >
-                <a
-                  [routerLink]="['/categorias/editar', categoria.id]"
-                  aria-label="Editar"
-                  class="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  <svg lucidePencil class="size-4" aria-hidden="true"></svg>
-                </a>
-                <button
-                  type="button"
-                  aria-label="Excluir"
-                  class="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
-                  [disabled]="excluindo()"
-                  (click)="abrirConfirmacao(categoria.id)"
-                >
-                  <svg lucideTrash class="size-4" aria-hidden="true"></svg>
-                </button>
-              </div>
-            </article>
-          </li>
+    <div role="status">
+      <p class="sr-only">Carregando categorias...</p>
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
+        @for (item of [1, 2, 3]; track item) {
+        <li class="animate-pulse rounded-2xl border border-border bg-card p-5 shadow-card">
+          <div class="flex items-center gap-4">
+            <div class="size-11 rounded-xl bg-muted"></div>
+            <div class="h-4 w-1/2 rounded bg-muted"></div>
+          </div>
+        </li>
         }
       </ul>
+    </div>
+    } @else if (categorias().length === 0 && !mensagemErro()) {
+    <app-empty-state titulo="Nenhuma categoria cadastrada"
+      texto="Cadastre uma categoria para começar a organizar suas notas.">
+      <svg icone lucideFolderOpen class="size-5"></svg>
+      <a acao routerLink="/categorias/cadastrar" [class]="ui.botaoPrimario">
+        <svg lucidePlus class="size-4" aria-hidden="true"></svg> Cadastrar categoria
+      </a>
+    </app-empty-state>
+    } @else if (categorias().length > 0) {
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      @for (categoria of categorias(); track categoria.id) {
+      <li class="min-w-0">
+        <article
+          class="group relative flex items-center gap-4 overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-card transition hover:border-primary/40 hover:shadow-float">
+          <app-note-category-accent />
+          <span [class]="
+                  'grid size-11 shrink-0 place-items-center rounded-xl text-lg font-bold ' +
+                  corCategoria(categoria)
+                " aria-hidden="true">{{ inicial(categoria.titulo) }}</span>
+          <span class="min-w-0 flex-1">
+            <span class="block truncate font-semibold text-foreground">{{
+              categoria.titulo
+              }}</span>
+            @if (contagemPorCategoria(); as contagens) {
+            <span class="block text-sm text-muted-foreground">
+              {{ contagens.get(categoria.id) ?? 0 }}
+              {{ (contagens.get(categoria.id) ?? 0) === 1 ? 'nota' : 'notas' }}
+            </span>
+            }
+          </span>
+          <div
+            class="relative z-10 flex shrink-0 gap-0.5 opacity-100 transition sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+            <a [routerLink]="['/categorias/editar', categoria.id]" aria-label="Editar"
+              class="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <svg lucidePencil class="size-4" aria-hidden="true"></svg>
+            </a>
+            <button type="button" aria-label="Excluir"
+              class="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
+              [disabled]="excluindo()" (click)="abrirConfirmacao(categoria.id)">
+              <svg lucideTrash class="size-4" aria-hidden="true"></svg>
+            </button>
+          </div>
+        </article>
+      </li>
+      }
+    </ul>
     }
   </div>
 </section>
 
-<app-confirm-dialog
-  [aberto]="categoriaIdEmExclusao() !== null"
-  titulo="Excluir categoria?"
-  texto="Esta categoria será removida."
-  rotuloConfirmar="Excluir categoria"
-  [pendente]="excluindo()"
-  (confirmar)="confirmarExclusao()"
-  (cancelar)="cancelarExclusao()"
-/>
+<app-confirm-dialog [aberto]="categoriaIdEmExclusao() !== null" titulo="Excluir categoria?"
+  texto="Esta categoria será removida." rotuloConfirmar="Excluir categoria" [pendente]="excluindo()"
+  (confirmar)="confirmarExclusao()" (cancelar)="cancelarExclusao()" />

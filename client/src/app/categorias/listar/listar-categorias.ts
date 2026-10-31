@@ -7,6 +7,7 @@ import { NotasService } from '../../notas/notas.service';
 import { UI } from '../../shared/ui/classes';
 import { ConfirmDialog } from '../../shared/ui/confirm-dialog';
 import { EmptyState } from '../../shared/ui/empty-state';
+import { NoteCategoryAccent } from '../../shared/ui/note-category-accent';
 import { obterCorCategoria } from '../categorias.cores';
 import { CategoriaDto } from '../categorias.models';
 import { CategoriasService } from '../categorias.service';
@@ -19,6 +20,7 @@ import { CategoriasService } from '../categorias.service';
     LucidePencil,
     LucidePlus,
     LucideTrash,
+    NoteCategoryAccent,
     RouterLink,
   ],
   selector: 'app-listar-categorias',
