@@ -1,60 +1,40 @@
 <section aria-labelledby="cadastrar-categoria-titulo">
-  <app-page-header
-    voltarPara="/categorias/listar"
-    voltarRotulo="Categorias"
-    titulo="Cadastrar categoria"
-    subtitulo="Registre uma categoria para organizar suas notas."
-    tituloId="cadastrar-categoria-titulo"
-  >
+  <app-page-header voltarPara="/categorias/listar" voltarRotulo="Categorias" titulo="Cadastrar categoria"
+    subtitulo="Registre uma categoria para organizar suas notas." tituloId="cadastrar-categoria-titulo">
     <svg lucideFolderPlus class="size-5"></svg>
   </app-page-header>
 
   @if (mensagemErro()) {
-    <div [class]="ui.alertaErro + ' mb-6'" role="alert">{{ mensagemErro() }}</div>
+  <div [class]="ui.alertaErro + ' mb-6'" role="alert">{{ mensagemErro() }}</div>
   }
 
   <form (submit)="cadastrarCategoria($event)" novalidate [class]="ui.painel + ' space-y-6'">
     <div>
       <label for="categoria-titulo" [class]="ui.label + ' mb-1.5'">
         Título da categoria
-        <span class="font-normal text-muted-foreground"
-          >{{ modeloCategoria().titulo.length }}/100</span
-        >
+        <span class="font-normal text-muted-foreground">{{ modeloCategoria().titulo.length }}/100</span>
       </label>
-      <input
-        id="categoria-titulo"
-        type="text"
-        autocomplete="off"
-        placeholder="Ex.: Trabalho"
-        [class]="
+      <input id="categoria-titulo" type="text" autocomplete="off" placeholder="Ex.: Trabalho" [class]="
           inputCls(formularioCategoria.titulo().touched() && formularioCategoria.titulo().invalid())
-        "
-        [formField]="formularioCategoria.titulo"
-        [attr.aria-invalid]="
+        " [formField]="formularioCategoria.titulo" [attr.aria-invalid]="
           formularioCategoria.titulo().touched() && formularioCategoria.titulo().invalid()
-        "
-        [attr.aria-describedby]="
+        " [attr.aria-describedby]="
           formularioCategoria.titulo().touched() && formularioCategoria.titulo().invalid()
             ? 'categoria-titulo-erro'
             : null
-        "
-      />
+        " />
       @if (formularioCategoria.titulo().touched() && formularioCategoria.titulo().invalid()) {
-        <p id="categoria-titulo-erro" [class]="ui.erroCampo">
-          {{ formularioCategoria.titulo().errors()[0].message }}
-        </p>
+      <p id="categoria-titulo-erro" [class]="ui.erroCampo">
+        {{ formularioCategoria.titulo().errors()[0].message }}
+      </p>
       }
     </div>
 
     <div class="flex flex-wrap justify-end gap-2 border-t border-border pt-5">
       <a routerLink="/categorias/listar" [class]="ui.botaoFantasma">Cancelar</a>
-      <button
-        type="submit"
-        [class]="ui.botaoPrimario"
-        [disabled]="enviandoFormulario()"
-        [attr.aria-busy]="enviandoFormulario()"
-      >
-        {{ enviandoFormulario() ? 'Cadastrando...' : 'Cadastrar categoria' }}
+      <button type="submit" [class]="ui.botaoPrimario" [disabled]="enviandoFormulario()"
+        [attr.aria-busy]="enviandoFormulario()">
+        {{ enviandoFormulario() ? 'Cadastrando...' : 'Cadastrar' }}
       </button>
     </div>
   </form>

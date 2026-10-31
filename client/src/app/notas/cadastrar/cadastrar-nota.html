@@ -1,16 +1,11 @@
 <section aria-labelledby="cadastrar-nota-titulo">
-  <app-page-header
-    voltarPara="/notas/listar"
-    voltarRotulo="Minhas notas"
-    titulo="Cadastrar nota"
-    subtitulo="Registre uma nota e, se quiser, associe categorias existentes."
-    tituloId="cadastrar-nota-titulo"
-  >
+  <app-page-header voltarPara="/notas/listar" voltarRotulo="Minhas notas" titulo="Cadastrar nota"
+    subtitulo="Registre uma nota e, se quiser, associe categorias existentes." tituloId="cadastrar-nota-titulo">
     <svg lucideNotebookPen class="size-5"></svg>
   </app-page-header>
 
   @if (mensagemErro()) {
-    <div [class]="ui.alertaErro + ' mb-6'" role="alert">{{ mensagemErro() }}</div>
+  <div [class]="ui.alertaErro + ' mb-6'" role="alert">{{ mensagemErro() }}</div>
   }
 
   <form (submit)="cadastrarNota($event)" novalidate [class]="ui.painel + ' space-y-6'">
@@ -19,11 +14,7 @@
         Título
         <span class="font-normal text-muted-foreground">{{ modeloNota().titulo.length }}/100</span>
       </label>
-      <input
-        id="nota-titulo"
-        type="text"
-        autocomplete="off"
-        placeholder="Ex.: Lista de compras"
+      <input id="nota-titulo" type="text" autocomplete="off" placeholder="Ex.: Lista de compras"
         [class]="inputCls(formularioNota.titulo().touched() && formularioNota.titulo().invalid())"
         [formField]="formularioNota.titulo"
         [attr.aria-invalid]="formularioNota.titulo().touched() && formularioNota.titulo().invalid()"
@@ -31,47 +22,36 @@
           formularioNota.titulo().touched() && formularioNota.titulo().invalid()
             ? 'nota-titulo-erro'
             : null
-        "
-      />
+        " />
       @if (formularioNota.titulo().touched() && formularioNota.titulo().invalid()) {
-        <p id="nota-titulo-erro" [class]="ui.erroCampo">
-          {{ formularioNota.titulo().errors()[0].message }}
-        </p>
+      <p id="nota-titulo-erro" [class]="ui.erroCampo">
+        {{ formularioNota.titulo().errors()[0].message }}
+      </p>
       }
     </div>
 
     <div>
       <label for="nota-descricao" [class]="ui.label + ' mb-1.5'">
         Descrição
-        <span class="font-normal text-muted-foreground"
-          >{{ modeloNota().descricao.length }}/300</span
-        >
+        <span class="font-normal text-muted-foreground">{{ modeloNota().descricao.length }}/300</span>
       </label>
-      <textarea
-        id="nota-descricao"
-        rows="8"
-        placeholder="Escreva algo..."
-        [class]="
+      <textarea id="nota-descricao" rows="8" placeholder="Escreva algo..." [class]="
           inputCls(
             formularioNota.descricao().touched() && formularioNota.descricao().invalid()
           ) + ' resize-none'
-        "
-        [formField]="formularioNota.descricao"
-        [attr.aria-invalid]="
+        " [formField]="formularioNota.descricao" [attr.aria-invalid]="
           formularioNota.descricao().touched() && formularioNota.descricao().invalid()
-        "
-        [attr.aria-describedby]="
+        " [attr.aria-describedby]="
           formularioNota.descricao().touched() && formularioNota.descricao().invalid()
             ? 'nota-descricao-erro'
             : 'nota-descricao-dica'
-        "
-      ></textarea>
+        "></textarea>
       @if (formularioNota.descricao().touched() && formularioNota.descricao().invalid()) {
-        <p id="nota-descricao-erro" [class]="ui.erroCampo">
-          {{ formularioNota.descricao().errors()[0].message }}
-        </p>
+      <p id="nota-descricao-erro" [class]="ui.erroCampo">
+        {{ formularioNota.descricao().errors()[0].message }}
+      </p>
       } @else {
-        <p id="nota-descricao-dica" [class]="ui.dicaCampo">Opcional. Até 300 caracteres.</p>
+      <p id="nota-descricao-dica" [class]="ui.dicaCampo">Opcional. Até 300 caracteres.</p>
       }
     </div>
 
@@ -82,42 +62,32 @@
       </p>
 
       @if (carregandoCategorias()) {
-        <p class="text-sm text-muted-foreground" role="status">Carregando categorias...</p>
+      <p class="text-sm text-muted-foreground" role="status">Carregando categorias...</p>
       } @else if (!categoriasCarregadas()) {
-        <p class="text-sm text-muted-foreground">As categorias não puderam ser carregadas.</p>
+      <p class="text-sm text-muted-foreground">As categorias não puderam ser carregadas.</p>
       } @else if (categorias().length === 0) {
-        <p class="text-sm text-muted-foreground">
-          Nenhuma categoria cadastrada. A nota pode ser registrada sem categorias.
-          <a routerLink="/categorias/cadastrar" [class]="ui.link">Cadastrar categoria</a>
-        </p>
+      <p class="text-sm text-muted-foreground">
+        Nenhuma categoria cadastrada. A nota pode ser registrada sem categorias.
+        <a routerLink="/categorias/cadastrar" [class]="ui.link">Cadastrar categoria</a>
+      </p>
       } @else {
-        <ul class="flex flex-wrap gap-2">
-          @for (categoria of categorias(); track categoria.id) {
-            <li class="max-w-full">
-              <button
-                type="button"
-                appCategoryBadge
-                [categoria]="categoria"
-                tamanho="md"
-                [ativo]="categoriaSelecionada(categoria.id)"
-                [attr.aria-pressed]="categoriaSelecionada(categoria.id)"
-                (click)="alternarCategoria(categoria.id, !categoriaSelecionada(categoria.id))"
-              ></button>
-            </li>
-          }
-        </ul>
+      <ul class="flex flex-wrap gap-2">
+        @for (categoria of categorias(); track categoria.id) {
+        <li class="max-w-full">
+          <button type="button" appCategoryBadge [categoria]="categoria" tamanho="md"
+            [ativo]="categoriaSelecionada(categoria.id)" [attr.aria-pressed]="categoriaSelecionada(categoria.id)"
+            (click)="alternarCategoria(categoria.id, !categoriaSelecionada(categoria.id))"></button>
+        </li>
+        }
+      </ul>
       }
     </fieldset>
 
     <div class="flex flex-wrap justify-end gap-2 border-t border-border pt-5">
       <a routerLink="/notas/listar" [class]="ui.botaoFantasma">Cancelar</a>
-      <button
-        type="submit"
-        [class]="ui.botaoPrimario"
-        [disabled]="enviandoFormulario() || carregandoCategorias()"
-        [attr.aria-busy]="enviandoFormulario()"
-      >
-        {{ enviandoFormulario() ? 'Cadastrando...' : 'Cadastrar nota' }}
+      <button type="submit" [class]="ui.botaoPrimario" [disabled]="enviandoFormulario() || carregandoCategorias()"
+        [attr.aria-busy]="enviandoFormulario()">
+        {{ enviandoFormulario() ? 'Cadastrando...' : 'Cadastrar' }}
       </button>
     </div>
   </form>
