@@ -34,40 +34,8 @@
       </div>
     </section>
 
-    <div class="mt-8 space-y-8">
-      <section aria-labelledby="acesso-rapido-titulo">
-        <h2 id="acesso-rapido-titulo" class="mb-4 text-lg font-bold text-foreground">
-          Acesso rápido
-        </h2>
-        <div class="grid grid-cols-2 gap-4">
-          <a routerLink="/notas/listar"
-            class="group flex min-w-0 items-center gap-4 rounded-2xl border border-border bg-card p-4 shadow-card transition hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-            <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground"
-              aria-hidden="true"><svg lucideNotebookText class="size-5"></svg></span>
-            <span class="min-w-0 flex-1">
-              <span class="block font-semibold text-foreground">Notas</span>
-              <span class="block text-sm text-muted-foreground">Ver, buscar e filtrar</span>
-            </span>
-            <svg lucideArrowRight
-              class="size-4 shrink-0 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-primary"
-              aria-hidden="true"></svg>
-          </a>
-          <a routerLink="/categorias/listar"
-            class="group flex min-w-0 items-center gap-4 rounded-2xl border border-border bg-card p-4 shadow-card transition hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-            <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground"
-              aria-hidden="true"><svg lucideFolderOpen class="size-5"></svg></span>
-            <span class="min-w-0 flex-1">
-              <span class="block font-semibold text-foreground">Categorias</span>
-              <span class="block text-sm text-muted-foreground">Organizar assuntos</span>
-            </span>
-            <svg lucideArrowRight
-              class="size-4 shrink-0 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-primary"
-              aria-hidden="true"></svg>
-          </a>
-        </div>
-      </section>
-
-      <section class="min-w-0" aria-labelledby="recentes-titulo">
+    <div class="mt-8 grid gap-6 lg:grid-cols-3">
+      <section class="min-w-0 lg:col-span-2" aria-labelledby="recentes-titulo">
         <div class="mb-4 flex items-center justify-between gap-4">
           <h2 id="recentes-titulo" class="text-lg font-bold text-foreground">Notas recentes</h2>
           <!-- <a routerLink="/notas/listar" [class]="ui.link + ' text-sm'">Ver todas →</a> -->
@@ -76,7 +44,7 @@
         @if (carregandoNotas()) {
         <div role="status">
           <p class="sr-only">Carregando notas...</p>
-          <div class="grid grid-cols-2 gap-4" aria-hidden="true">
+          <div class="space-y-3" aria-hidden="true">
             @for (item of [1, 2, 3, 4]; track item) {
             <div class="animate-pulse rounded-2xl border border-border bg-card p-5 shadow-card">
               <div class="h-4 w-1/2 rounded bg-muted"></div>
@@ -88,7 +56,7 @@
         } @else if (mensagemErroNotas()) {
         <div [class]="ui.alertaErro" role="alert">{{ mensagemErroNotas() }}</div>
         } @else if (notasRecentes().length > 0) {
-        <ul class="grid grid-cols-2 gap-4">
+        <ul class="space-y-3">
           @for (nota of notasRecentes(); track nota.id) {
           <li class="min-w-0">
             <a [routerLink]="['/notas/detalhes', nota.id]"
@@ -126,6 +94,54 @@
         </div>
         }
       </section>
+
+      <aside class="space-y-4" aria-labelledby="acesso-rapido-titulo">
+        <h2 id="acesso-rapido-titulo" class="text-lg font-bold text-foreground">
+          Acesso rápido
+        </h2>
+        <a routerLink="/notas/listar"
+          class="group flex min-w-0 items-center gap-4 rounded-2xl border border-border bg-card p-4 shadow-card transition hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+          <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground"
+            aria-hidden="true"><svg lucideNotebookText class="size-5"></svg></span>
+          <span class="min-w-0 flex-1">
+            <span class="block font-semibold text-foreground">Notas</span>
+            <span class="block text-sm text-muted-foreground">Ver, buscar e filtrar</span>
+          </span>
+          <svg lucideArrowRight
+            class="size-4 shrink-0 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-primary"
+            aria-hidden="true"></svg>
+        </a>
+        <a routerLink="/categorias/listar"
+          class="group flex min-w-0 items-center gap-4 rounded-2xl border border-border bg-card p-4 shadow-card transition hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+          <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground"
+            aria-hidden="true"><svg lucideFolderOpen class="size-5"></svg></span>
+          <span class="min-w-0 flex-1">
+            <span class="block font-semibold text-foreground">Categorias</span>
+            <span class="block text-sm text-muted-foreground">Organizar assuntos</span>
+          </span>
+          <svg lucideArrowRight
+            class="size-4 shrink-0 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-primary"
+            aria-hidden="true"></svg>
+        </a>
+
+        @if (carregandoCategorias()) {
+        <p class="text-sm text-muted-foreground" role="status">Carregando categorias...</p>
+        } @else if (mensagemErroCategorias()) {
+        <div [class]="ui.alertaErro" role="alert">{{ mensagemErroCategorias() }}</div>
+        } @else if (categorias().length > 0) {
+        <div class="rounded-2xl border border-border bg-card p-5 shadow-card">
+          <h3 class="mb-3 text-sm font-semibold text-foreground">Suas categorias</h3>
+          <ul class="flex flex-wrap gap-2">
+            @for (categoria of categorias(); track categoria.id) {
+            <li class="max-w-full">
+              <a [routerLink]="['/categorias/detalhes', categoria.id]" appCategoryBadge
+                [categoria]="categoria"></a>
+            </li>
+            }
+          </ul>
+        </div>
+        }
+      </aside>
     </div>
     } @else {
     <section class="grid items-center gap-12 py-8 lg:grid-cols-2 lg:py-16" aria-labelledby="home-titulo">
