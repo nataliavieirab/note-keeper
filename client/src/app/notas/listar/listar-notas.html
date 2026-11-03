@@ -1,8 +1,4 @@
-<div class="min-h-screen bg-background">
-  <app-navbar></app-navbar>
-
-  <main class="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-    <section aria-labelledby="lista-notas-titulo">
+<section aria-labelledby="lista-notas-titulo">
       <div class="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 id="lista-notas-titulo" class="text-2xl font-bold tracking-tight text-foreground">
@@ -170,10 +166,9 @@
         </app-empty-state>
         }
       </div>
-    </section>
-  </main>
+</section>
 
-  <a routerLink="/notas/cadastrar" aria-label="Nova nota"
+<a routerLink="/notas/cadastrar" aria-label="Nova nota"
     class="fixed right-6 bottom-6 z-10 grid size-14 place-items-center rounded-full bg-brand text-primary-foreground shadow-float transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:hidden">
     <svg lucidePlus class="size-6" aria-hidden="true"></svg>
   </a>
@@ -181,4 +176,3 @@
   <app-confirm-dialog [aberto]="notaIdEmExclusao() !== null" titulo="Excluir nota?" texto="Esta nota será removida."
     rotuloConfirmar="Excluir nota" [pendente]="excluindo()" (confirmar)="confirmarExclusao()"
     (cancelar)="cancelarExclusao()" />
-</div>

@@ -16,7 +16,6 @@ import { ApiValidationProblemDetails } from '../../auth/auth.models';
 import { CategoriaDto } from '../../categorias/categorias.models';
 import { CategoriasService } from '../../categorias/categorias.service';
 import { formatarData, formatarTempoRelativo } from '../../shared/datas';
-import { Navbar } from '../../shared/navbar/navbar';
 import { CategoryBadge } from '../../shared/ui/category-badge';
 import { UI } from '../../shared/ui/classes';
 import { ConfirmDialog } from '../../shared/ui/confirm-dialog';
@@ -45,7 +44,6 @@ function normalizarTexto(valor: string): string {
     LucideSearch,
     LucideTrash,
     LucideX,
-    Navbar,
     NoteCategoryAccent,
     RouterLink,
     StatusBadge,
