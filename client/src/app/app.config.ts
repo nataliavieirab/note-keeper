@@ -1,10 +1,10 @@
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, Routes } from '@angular/router';
-import { environment } from '../environments/environment.development';
-import { isAnonymousGuard, isAuthenticatedGuard } from './auth/auth.guards';
-import { CHAVE_ARMAZENAMENTO, URL_API } from './auth/auth.tokens';
+import { environment } from '../environments/environment';
 import { authInterceptor } from './auth/auth.interceptor';
+import { isAnonymousGuard, isAuthenticatedGuard } from './auth/auth.guards';
+import { CHAVE_ARMAZENAMENTO, URL_API } from './auth/auth.token';
 
 const routes: Routes = [
   {
@@ -43,11 +43,13 @@ const routes: Routes = [
         loadComponent: () =>
           import('./categorias/detalhes/detalhes-categoria').then((c) => c.DetalhesCategoria),
       },
+
       {
         path: 'editar/:categoriaId',
         loadComponent: () =>
           import('./categorias/editar/editar-categoria').then((c) => c.EditarCategoria),
       },
+
       {
         path: 'cadastrar',
         loadComponent: () =>
@@ -56,16 +58,20 @@ const routes: Routes = [
     ],
   },
   {
-    path: 'notas/listar',
-    canActivate: [isAuthenticatedGuard],
-    loadComponent: () => import('./notas/listar/listar-notas').then((c) => c.ListarNotas),
-  },
-  {
     path: 'notas',
     canActivate: [isAuthenticatedGuard],
     loadComponent: () => import('./notas/shell/notas-shell').then((c) => c.NotasShell),
     children: [
       { path: '', redirectTo: 'listar', pathMatch: 'full' },
+      {
+        path: 'listar',
+        loadComponent: () => import('./notas/listar/listar-notas').then((c) => c.ListarNotas),
+      },
+      {
+        path: 'cadastrar',
+        loadComponent: () =>
+          import('./notas/cadastrar/cadastrar-nota').then((c) => c.CadastrarNota),
+      },
       {
         path: 'detalhes/:notaId',
         loadComponent: () => import('./notas/detalhes/detalhes-nota').then((c) => c.DetalhesNota),
@@ -73,11 +79,6 @@ const routes: Routes = [
       {
         path: 'editar/:notaId',
         loadComponent: () => import('./notas/editar/editar-nota').then((c) => c.EditarNota),
-      },
-      {
-        path: 'cadastrar',
-        loadComponent: () =>
-          import('./notas/cadastrar/cadastrar-nota').then((c) => c.CadastrarNota),
       },
     ],
   },
