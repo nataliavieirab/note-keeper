@@ -4,7 +4,7 @@ import { provideRouter, Routes } from '@angular/router';
 import { environment } from '../environments/environment';
 import { authInterceptor } from './auth/auth.interceptor';
 import { isAnonymousGuard, isAuthenticatedGuard } from './auth/auth.guards';
-import { CHAVE_ARMAZENAMENTO, URL_API } from './auth/auth.token';
+import { CHAVE_ARMAZENAMENTO, URL_API } from './auth/auth.tokens';
 
 const routes: Routes = [
   {
