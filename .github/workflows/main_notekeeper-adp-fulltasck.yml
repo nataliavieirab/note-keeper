@@ -68,7 +68,7 @@ jobs:
 
   deploy:
     runs-on: windows-latest
-    needs: build
+    needs: [build, migrate]
     permissions:
       id-token: write #This is required for requesting the JWT
       contents: read #This is required for actions/checkout
@@ -95,7 +95,7 @@ jobs:
         run: |
           az webapp config appsettings set `
             --resource-group "notekeeper" `
-            --name "notekeeper" `
+            --name "notekeeper-adp-fulltasck" `
             --settings `
             "ConnectionStrings__SqlServer=$env:SQLSERVER_CONNECTIONSTRING" `
             "Jwt__SigningKey=$env:JWT_SIGNING_KEY" `
