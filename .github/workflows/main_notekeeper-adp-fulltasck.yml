@@ -6,7 +6,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - notekeeper-adp-fullta
 on:
   push:
     branches:
-      - 'main'
+      - "main"
   workflow_dispatch:
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.x'
+          dotnet-version: "10.x"
 
       - name: Build with dotnet
         run: dotnet build server/NoteKeeper.slnx --configuration Release
@@ -35,6 +35,37 @@ jobs:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
 
+  migrate:
+    runs-on: windows-latest
+    needs: build
+    permissions:
+      contents: read #This is required for actions/checkout
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.x"
+
+      - name: Restore dependencies
+        run: dotnet restore server/src/Api/NoteKeeper.Api.csproj
+
+      - name: Install Entity Framework CLI
+        run: dotnet tool install --global dotnet-ef
+
+      - name: Apply ORM migrations to AzureSQL
+        env:
+          SQLSERVER_CONNECTIONSTRING: ${{ secrets.SQLSERVER_CONNECTIONSTRING }}
+          LuckyPenny__LicenseKey: ${{ secrets.LUCKYPENNY_LICENSE_KEY }}
+        run: |
+          dotnet ef database update `
+            --project server/src/Infraestrutura/NoteKeeper.Infraestrutura.csproj `
+            --startup-project server/src/Api/NoteKeeper.Api.csproj `
+            --configuration Release `
+            --connection "$env:SQLSERVER_CONNECTIONSTRING"
+
   deploy:
     runs-on: windows-latest
     needs: build
@@ -47,7 +78,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: .net-app
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -55,11 +86,25 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_624E1692C45C4FDCBB25A44F1BAF21EA }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_80146A0D0F9E4A70A3FE002AB912AB68 }}
 
+      - name: Configure Azure Web App settings
+        shell: pwsh
+        env:
+          SQLSERVER_CONNECTIONSTRING: ${{ secrets.SQLSERVER_CONNECTIONSTRING }}
+          JWT_SIGNING_KEY: ${{ secrets.JWT_SIGNING_KEY }}
+          LUCKYPENNY_LICENSE_KEY: ${{ secrets.LUCKYPENNY_LICENSE_KEY }}
+        run: |
+          az webapp config appsettings set `
+            --resource-group "notekeeper" `
+            --name "notekeeper" `
+            --settings `
+            "ConnectionStrings__SqlServer=$env:SQLSERVER_CONNECTIONSTRING" `
+            "Jwt__SigningKey=$env:JWT_SIGNING_KEY" `
+            "LuckyPenny__LicenseKey=$env:LUCKYPENNY_LICENSE_KEY"
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'notekeeper-adp-fulltasck'
-          slot-name: 'Production'
+          app-name: "notekeeper-adp-fulltasck"
+          slot-name: "Production"
           package: .
-          
